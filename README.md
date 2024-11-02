@@ -49,4 +49,6 @@ preemptive; for non-preemption, define all tasks as non-preemptive.
 
 
 ## Contributing
-We welcome all contributions to this project. Please refer to the documents for relevant information.
+We welcome all contributions to this project. Please refer to   
+[the documents](https://github.com/ZJU-ESE-Lab/SmartSAR/blob/main/Contribution_guides.md)
+<a id="jump_8"></a> for relevant information.
