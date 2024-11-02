@@ -21,11 +21,11 @@
     
 **3. Supports multiple scheduling mechanisms:**
 
-  1)Preemptive scheduling
+    1)Preemptive scheduling
   
-  2)Non-preemptive scheduling
+    2)Non-preemptive scheduling
   
-  3)Hybrid scheduling
+    3)Hybrid scheduling
   
 **4. Supports static configuration**
 
@@ -43,17 +43,15 @@ preemptive; for non-preemption, define all tasks as non-preemptive.
 4. Does not support internal communication.
 5. The system kernel does not support static reduction.
 ## API List：
-| Function       | Parameter                          | Description                                                                                                                                       |  
-|----------------|----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|  
+| Function Name                  | Parameters                                                   | Description                                                                                                                                                                                                                         |  
+|--------------------------------|--------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
 | ActivateTask   | `TaskType TaskID`                | Activates a task in the suspend state, placing it in the ready queue, and executes task scheduling based on the user-defined scheduling policy, if conditions are met.                                       |  
 | GetTaskState   | `TaskType TaskID, TaskStateRefType state` | Retrieves the state of the specified task (TaskID).                                                                                         |  
 | TerminateTask  | `void`                           | Suspends the current task if conditions are met. It cannot be called in an interrupt service routine. The current task must have released any acquired external resources. After suspension, task scheduling is executed based on the user-defined scheduling policy. |  
 | GetTaskID      | `TaskRefType PTaskID`            | Retrieves the ID of the currently running task.                                                                                      |  
 | ChainTask      | `TaskType TaskID`                | Suspends itself and activates a task in the suspend state (TaskID), placing it in the ready queue, and executes task scheduling based on the user-defined scheduling policy, if conditions are met. This API cannot be called in an interrupt service routine, and the current task must have released any acquired external resources. |
 
-| EnableAllInterrupts       | void                 | Enables all interrupts. |
-| Function Name                  | Parameters                                                   | Description                                                                                                                                                                                                                         |  
-|--------------------------------|--------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|  
+ 
 | `EnableAllInterrupts`          | `void`                                                       | Enables all interrupts.                                                                                                                                                                                                           |  
 | `ResumeAllInterrupts`          | `void`                                                       | Enables all interrupts, corresponding to `SuspendAllInterrupts`.                                                                                                                                                                   |  
 | `DisableAllInterrupts`         | `void`                                                       | Disables all interrupts without retaining those triggered during the disabled period.                                                                                                                                            |  
