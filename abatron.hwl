@@ -1,0 +1,27 @@
+OPEN source 0 0 50 25
+Source < attributes MARKS off
+OPEN assembly 50 0 50 25
+Assembly < attributes ADR off,CODE off,ABSADR on,SYMB off,TOPPC 0xC000
+OPEN procedure 0 25 50 25
+Procedure < attributes VALUES on,TYPES off
+OPEN register 50 25 50 25
+Register < attributes FORMAT AUTO,COMPLEMENT None
+OPEN memory 50 50 50 25
+Memory < attributes FORMAT hex,COMPLEMENT None,WORD 1,ASC on,ADR on,ADDRESS 0x0
+OPEN data 0 50 50 25
+Data:1 < attributes SCOPE global,COMPLEMENT None,FORMAT Symb,MODE automatic,UPDATERATE 10,NAMEWIDTH 16
+OPEN data 0 75 50 25
+Data:2 < attributes SCOPE local,COMPLEMENT None,FORMAT Symb,MODE automatic,UPDATERATE 10,NAMEWIDTH 16
+OPEN terminal 50 75 50 25
+Terminal < attributes CACHESIZE 1000
+Terminal < attributes SCI_PORT COM1,SCI_BAUD  9600,SCI_SHOW_PROTOCOL OFF,SCI_ENABLED ON
+OPEN visualizationtool 70 1 22 72
+VisualizationTool< Attributes [stEditM="0",swGridMode="3",swRefresh="1",refTime="1"]
+VisualizationTool< LoadInstrument PushSwitch[BoundX="80",BoundY="220",Port_PortKind="2",Port="redButtonDown"]
+VisualizationTool< LoadInstrument PushSwitch[BoundX="80",BoundY="260",Port_PortKind="2",Port="blueButtonDown",colSwitch="16711680"]
+VisualizationTool< LoadInstrument Seg7[BoundX="40",BoundY="20",BoundH="180",BoundW="120",Port="0x1",colOn="13421822",colOff="255",colOutL="T1,0"]
+VisualizationTool< ResetVT Undo
+bckcolor 50331647
+font 'Courier New' 9 BLACK
+AUTOSIZE on
+ACTIVATE Register Data:2 Data:1 Procedure Memory Assembly Source Terminal VisualizationTool 

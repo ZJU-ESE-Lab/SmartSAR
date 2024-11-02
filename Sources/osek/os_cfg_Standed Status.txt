@@ -1,0 +1,55 @@
+#ifndef	_OS_CFG_H
+#define	_OS_CFG_H
+
+#define OS_TASK_AUTO_DEFINE
+#define	OS_NUM_TASK	4/*用户定义了四个任务*/
+
+#define	OS_EVENT_EN/*使用事件模块*/
+
+#define	OS_ALARM_EN/*使用报警器模块*/
+#define	OS_NUM_CTR	1/*一个机时七*/
+#define	OS_NUM_ALARM	1/*一个报警器*/
+#define OS_ALARM_AUTO_DEFINE
+
+
+#define	OS_RESOURCE_EN/*使用任务模块*/
+#undef  OS_INT_RES/*本demo没有内部资源*/
+
+#define	OS_OUT_RES/*使用外部资源*/
+#define	OS_RES_SCHEDULER/*使用调度器资源*/
+#define	OS_NUM_OUT_RES	1 /*外部资源数目*/
+
+#define	OS_EXCEPTION_EN /*使用中断模块*/
+#define OS_ISR_AUTO_DEFINE
+#define	OS_NUM_ISR	1/*一个用户自定中断服务程序*/
+
+#define	OS_SAVE_GPR
+
+#undef	OS_EXTENDED_STATUS /*本demo为标准状态，非扩展状态*/
+
+#define	OS_HOOK_STARTUP
+#define	OS_HOOK_SHUTDOWN
+//#define OS_HOOK_ERROR
+/*一下HOOK功能试用版不支持本demo*/
+#undef	OS_HOOK_PRETASK
+#undef	OS_HOOK_POSTTASK
+#undef  OS_HOOK_GET_SERVICEID
+#undef  OS_HOOK_PARAM_ACCESS
+
+/*试用版只支持混合抢占，通过定义各个任务属性实现其它抢占模式*/
+#define	OS_MIX_SCHEDULE
+#undef	OS_FULL_SCHEDULE
+#undef	OS_NON_SCHEDULE
+
+/*本demo运行在HCS12平台上*/
+#define	OS_CPU_HCS12
+
+#define	OS_TICKS_PER_SEC	50000
+#define	OS_STK_SYSTEM_SIZE	1000
+
+#define	OS_TASK_IDLE_STK_SIZE	512
+
+#define	OS_SCI_EN
+#define OS_STACK_SEPARATE
+
+#endif

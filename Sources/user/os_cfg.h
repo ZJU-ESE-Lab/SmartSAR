@@ -1,0 +1,26 @@
+#ifndef	_OS_CFG_H
+#define	_OS_CFG_H
+#define	OS_EVENT_EN
+#define	OS_ALARM_EN
+#define	OS_EXCEPTION_EN
+#define	OS_NUM_CTR	1
+#define	OS_NUM_ALARM	8
+#define OS_ALARM_AUTO_DEFINE
+#define	OS_EXTENDED_STATUS
+#define	OS_HOOK_STARTUP
+#define	OS_HOOK_SHUTDOWN
+#define	OS_RES_SCHEDULER
+#define	OS_RESOURCE_EN
+#define	OS_SAVE_GPR
+#define	OS_NON_SCHEDULE
+#define	OS_CPU_HCS12
+#define	OS_TICKS_PER_SEC	50000
+#define	OS_STK_SYSTEM_SIZE	1000
+#define	OS_NUM_TASK	4
+#define	OS_TASK_IDLE_STK_SIZE	512
+#define	OS_SCI_EN
+#define OS_CHECK_STACK
+#define OS_STACK_SEPARATE
+#define OS_TASK_AUTO_DEFINE
+
+#endif
