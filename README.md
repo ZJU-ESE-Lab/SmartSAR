@@ -10,13 +10,15 @@
     2)Context switch time < 8us
   
     3)Interrupt response time < 36us
+    
 **2. Complies with OSEK OS, OSEK COM, OSEK OIL standards:**
 
-  1)OSEK standard-compliant API
-  
-  2)OSEK standard-compliant system development process
-  
-  3)OSEK standard-compliant external communication mechanisms
+    1)OSEK standard-compliant API
+   
+    2)OSEK standard-compliant system development process
+   
+    3)OSEK standard-compliant external communication mechanisms
+    
 **3. Supports multiple scheduling mechanisms:**
 
   1)Preemptive scheduling
@@ -25,6 +27,7 @@
   
   3)Hybrid scheduling
 **4. Supports static configuration**
+
 **5. Supports various mainstream embedded processors**
 
 
@@ -47,6 +50,7 @@ preemptive; for non-preemption, define all tasks as non-preemptive.
 | GetTaskID      | `TaskRefType PTaskID`            | Retrieves the ID of the currently running task.                                                                                      |  
 | ChainTask      | `TaskType TaskID`                | Suspends itself and activates a task in the suspend state (TaskID), placing it in the ready queue, and executes task scheduling based on the user-defined scheduling policy, if conditions are met. This API cannot be called in an interrupt service routine, and the current task must have released any acquired external resources. |
 
+| EnableAllInterrupts       | void                 | Enables all interrupts. |
 
 ## Contributing
 We welcome all contributions to this project. Please refer to [the documents](https://github.com/ZJU-ESE-Lab/SmartSAR/blob/main/Contribution_guides.md)
