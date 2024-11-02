@@ -38,16 +38,19 @@ preemptive; for non-preemption, define all tasks as non-preemptive.
 3. Does not support OS_HOOK_GET_SERVICEID, OS_HOOK_PARAM_ACCESS.
 4. Does not support internal communication.
 5. The system kernel does not support static reduction.
-## API列表：
-| 序号/分类 | Function          | Parameter                            | description                                                                                                                                           |  
-| --------- | --------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |  
-| 1         | ActivateTask    | `TaskType TaskID`               | Activates a task in the suspend state, placing it in the ready queue, and executes task scheduling based on the user-defined scheduling policy, if conditions are met.                                       |  
-| 2         | GetTaskState    | `TaskType TaskID, TaskStateRefType state` | 获取指定任务（TaskID）的状态，并将其存储在`state`中。                                                                                         |  
-| 3         | TerminateTask   | `void`                          | 如果条件满足，则挂起当前任务。它不能在中断服务例程中调用。当前任务必须释放已获取的所有外部资源。挂起后，根据用户定义的调度策略执行任务调度。         |  
-| 4         | GetTaskID       | `TaskRefType PTaskID`           | 获取当前正在运行的任务的ID，并将其存储在`PTaskID`中。                                                                                           |  
-| 5         | ChainTask       | `TaskType TaskID`               | 挂起当前任务，并激活处于暂停状态的任务（TaskID），将其置于准备队列中，并根据用户定义的调度策略执行任务调度（如果条件满足）。此API不能在中断服务例程中调用，当前任务必须释放已获取的所有外部资源。 |
+## API List：
+ | Function          | Parameter                            | description                                                                                                                                           |  
+ | --------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |  
+   | ActivateTask    | `TaskType TaskID`               | Activates a task in the suspend state, placing it in the ready queue, and executes task scheduling based on the user-defined scheduling policy, if conditions are met.                                       |  
+    | GetTaskState    | `TaskType TaskID, TaskStateRefType state` | Retrieves the state of the specified task (TaskID).                                                                                         |  
+   | TerminateTask   | `void`                          | Suspends the current task if conditions are met. It cannot be called in an interrupt service routine. The current task must have released any acquired external resources. After suspension, task scheduling is executed based on the user-defined scheduling policy.        |  
+   | GetTaskID       | `TaskRefType PTaskID`           |Retrieves the ID of the currently running task.                                                                                      |  
+| ChainTask       | `TaskType TaskID`               | Suspends itself and activates a task in the suspend state (TaskID), placing it in the ready queue, and executes task scheduling based on the user-defined scheduling policy, if conditions are met. This API cannot be called in an interrupt service routine, and the current task must have released any acquired external resources. |
 
 
 ## Contributing
 We welcome all contributions to this project. Please refer to [the documents](https://github.com/ZJU-ESE-Lab/SmartSAR/blob/main/Contribution_guides.md)
 <a id="jump_8"></a> for relevant information.
+
+## License
+This project is released under the [Apache 2.0 license](https://github.com/ZJU-ESE-Lab/SmartSAR/blob/main/LICENSE) .
