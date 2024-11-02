@@ -4,9 +4,8 @@
 
 ## Features:
 **1. Ultra-micro real-time operating system kernel:**
-  1)Kernel size < 10k
-  
-  2)Context switch time < 8us
+1)Kernel size < 10k
+    2)Context switch time < 8us
   
   3)Interrupt response time < 36us
 **2. Complies with OSEK OS, OSEK COM, OSEK OIL standards:**
