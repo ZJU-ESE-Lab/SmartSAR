@@ -3,8 +3,8 @@
 * Copyright (c) 2005,浙江大学嵌入式系统研究开发中心
 * All rights reserved.
 *
-* 文件名称：osek.h
-* 摘    要：包含各模块的*.h文件
+* 文件名称：osek.c
+* 摘    要：包含各模块的*.C文件
 *
 * 当前版本：1.1
 * 作    者：厉蒋
@@ -15,30 +15,34 @@
 * 完成日期：2004年9月14日
 *********************************************************************************
 */
-#ifndef _OSEK_H
-#define _OSEK_H
 
+#include "includes.h"
+#define  OS_MASTER_FILE   /* 防止下列文件重复包含includes.h*/
 
-#include  "os_core.h"
-#include  "os_task.h"
-#include "os_task_cpu.h"
-#include  "os_res.h"  /*这个头文件不需要宏开关的控制，因为内部和外部资源是分开*/
+#include "global.c"
+#include "os_core.c"
+#include "os_task.c"
+
+#ifdef OS_RESOURCE_EN
+#include "os_res.c"
+#endif
 
 #ifdef OS_EVENT_EN
-#include  "os_evt.h"
+#include "os_evt.c"
 #endif
 
 #ifdef OS_ALARM_EN
-#include  "os_alarm.h"
+#include "os_alarm.c"
 #endif
 
 #ifdef OS_EXCEPTION_EN
-#include "os_irq.h"
+#include "os_irq.c"
 #endif
 
+#ifdef WatchSystemInfo
+#include "WatchSystemInfo.c"
+#endif
 
 #ifdef	COM_EN
-#include  "com.h"
-#endif
-
+#include "com.c"
 #endif

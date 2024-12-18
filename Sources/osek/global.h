@@ -70,51 +70,27 @@ typedef EventMaskType    *EventMaskRefType;
 
 extern StatusType OsLastError;   /*用于返回错误*/
 
+#if defined(OS_EXCEPTION_EN)|| defined(OS_ALARM_EN)
 
 extern  INT8U  OSIntNesting;             /* 中断嵌套 */
 #define NOT_IN_ISR  (0==OSIntNesting)
 
+#else/*#if defined(OS_EXCEPTION_EN)|| defined(OS_ALARM_EN)*/
 
+#define NOT_IN_ISR  1
 
+#endif/*#if defined(OS_EXCEPTION_EN)|| defined(OS_ALARM_EN)*/
 
+#if defined(OS_EVENT_EN)|| (!defined(OS_CPU_MPC555))/*在扩展状态或非MPC555平台上，可以栈分开*/
 #define OS_STACK_SEPARATE      /*栈分开*/
+#endif/*#if defined(OS_EVENT_EN)&&defined(OS_CPU_MPC555)*/
 
+#if defined(OS_CPU_HCS12)
 #define OS_STACK_INIT /*需要初始化栈*/
+#endif/*#if defined(OS_CPU_HCS12)*/ 
 
-#ifdef OS_STACK_SEPARATE
-#if  !defined(OS_TASK_IDLE_STK_SIZE) || (OS_TASK_IDLE_STK_SIZE != 512)
-#define  OS_TASK_IDLE_STK_SIZE  512
-#endif
-#endif/*#ifdef OS_STACK_SEPARATE*/
-
-#ifdef OS_STACK_INIT
-void  OSStartHighRdy();
-#define OSStartFirstTask(curTcb) OSTaskHighRun()
-#endif/* #ifdef OS_STACK_INIT*/
-
-#define OS_NUM_SYS_TASK ((OS_NUM_TASK)+1)
-#define  OS_RDY_TBL_SIZE   (((OS_NUM_SYS_TASK)) / 8 + 1)   /*ready table 的大小可控制 */
-/*最多64个任务*/
-#define OS_MAX_TASKS 64
-
-#ifndef OS_STK_SYSTEM_SIZE
-#define OS_STK_SYSTEM_SIZE 300
-#endif
-
-#ifndef OS_NUM_ISR
-#define OS_NUM_ISR 0
-#endif
-
-#ifndef OS_NUM_CTR
-#define OS_NUM_CTR 0
-#endif
-
-#ifndef OS_NUM_ALARM
-#define OS_NUM_ALARM 0
-#endif
-
-#ifndef OS_NUM_OUT_RES
-#define OS_NUM_OUT_RES 0
-#endif
+#ifdef WatchSystemInfo
+extern  volatile  INT32U  OSTime;                   /* */
+#endif /*WatchSystemInfo*/
 
 #endif

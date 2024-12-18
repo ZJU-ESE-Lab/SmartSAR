@@ -29,6 +29,11 @@
 *                              宏定义
 *********************************************************************************************************
 */
+#define OS_NUM_SYS_TASK ((OS_NUM_TASK)+1)
+#define  OS_RDY_TBL_SIZE   (((OS_NUM_SYS_TASK)) / 8 + 1)   /*ready table 的大小可控制 */
+/*最多64个任务*/
+#define OS_MAX_TASKS 64
+
 
 /*任务的状态标记宏*/
 #define  READY            0x00        
@@ -40,8 +45,10 @@
 
 #define  INVALID_TASK     (NULL)          /* 无效任务*/
 
-#define  INVALID_RESOURCE     (NULL)          /* 无效任务*/
-#define  INVALID_ALARM     (NULL)          /* 无效任务*/
+/*是否可抢占的宏定义*/
+#define	Preemptive	1
+#define	NoPreemptive 0
+
 
 /*调度模式的宏定义*/
 #define FULL_SCHED 0x10
@@ -80,8 +87,10 @@ typedef void (*OSTaskEntry)(void) ;
 typedef struct TaskCfg
 {
     OSTaskEntry PTask;/*任务入口指针*/
+#ifdef OS_STACK_SEPARATE	/*在BCC1的情况下，任务不需要单独的堆栈*/ 
     OSSTKRef    PStkHigh;/*堆栈高指针*/ 
     OSSTKRef    PStkLow;   /* 堆栈底指针*/
+#endif/*#ifdef OS_EVENT_EN*/     
     PriorityType  ID; /*内部资源优先级*/
 	  PriorityType  RunPrio; /*内部资源优先级*/
 	  INT8U	InfoBit;	  /*记录任务属性以及运行信息，第一位表示留待扩展、
@@ -101,12 +110,12 @@ typedef struct TaskCfg
 *成员变量互相引用。因此在这里typedef
 *
 ********************************************/
-//#if defined(OS_OUT_RES)||defined(OS_RES_SCHEDULER) /*外部或调度器资源*/
+#if defined(OS_OUT_RES)||defined(OS_RES_SCHEDULER) /*外部或调度器资源*/
 typedef struct OSResCB OSRCB;
 typedef struct OSResCB* OSRCBRef;
 
 
-//#endif /*if defined(OS_OUT_RES)||defined(OS_RES_SCHEDULER)*/
+#endif /*if defined(OS_OUT_RES)||defined(OS_RES_SCHEDULER)*/
 
 
 /******************************************************************************
@@ -118,21 +127,33 @@ typedef struct  OSTCB
     OSTaskEntry  PTask;               /* 任务入口指针*/
     OSSTKRef     OSTCBStkTop;         /* 栈顶指针，记录任务栈的顶指针，用于初始化栈用*/
 
+#ifdef OS_EVENT_EN
     EventMaskType   WEvent;             /* waited events的掩码	    */
     EventMaskType   SEvent;             /* setted events的掩码 		*/
+#endif /*#ifdef OS_EVENT_EN*/ 
 
+#if defined(OS_CHECK_STACK) && defined(OS_STACK_SEPARATE) /*在栈分开的情况下下才有栈的检查*/  
     OSSTKRef     OSTCBStkBottom;        /* 堆栈底指针				    */
+#endif /*#if defined(OS_CHECK_STACK) && defined(OS_EVENT_EN)*/    
  	
+#if defined(OS_OUT_RES)||defined(OS_RES_SCHEDULER) /*外部或调度器资源*/
     OSRCBRef		resources;          /* 外部资源链表头指针            */
+#endif /*if defined(OS_OUT_RES)||defined(OS_RES_SCHEDULER)*/
  	
+#ifdef OS_INT_RES
     OSTCBRef        SavedTCB;           /* 指向原来在该位置的tcb指针     */
+#endif
+#if defined(OS_INT_RES)	||defined(OS_OUT_RES)||defined(OS_RES_SCHEDULER) /*当得到内部资源或外部资源的时候都设置一下运行优先级*/
 	PriorityType    RunPrio;         /* 运行优先级				*/
+#endif/*#if defined(OS_INT_RES)	*//*||defined(OS_OUT_RES)*/	
 
     PriorityType       OSTCBId;            /* Task ID                       */
     INT8U          OSTCBStat;          /* 任务状态                      */
 
+#ifndef OS_CPU_MPC555
     INT8U          OSTCBBitX;          /* 用于访问就绪表的掩码*/
     INT8U          OSTCBBitY;          /* 用于访问就绪表数组的掩码 */
+#endif/*#ifndef OS_CPU_MPC555*/
 
 	INT8U			InfoBit;           /*记录任务属性以及运行信息，第一位表示留待扩展、
                                                                    第二位表示留待扩展、
@@ -145,14 +166,165 @@ typedef struct  OSTCB
 		
 } OSTCB;
 
+
+
+
+
+ 
+/*得到任务的类型，扩展或标准*/
+#define GET_TASK_TYPE(PTCB) ((PTCB)->InfoBit & EXTENDED)
+
+/*得到任务调度方式*/
+#define GET_TASK_SCHED(PTCB)  ((PTCB)->InfoBit & FULL_SCHED)
+
+/*得到任务是否占有内部资源*/
+#define GET_TASK_HOLD_INT_RES(PTCB) ((PTCB)->InfoBit & HOLD_INT_RES)
+/*设置任务属性*/
+#define SET_TASK_PROPERTY(PTCB,PROPERTY) (PTCB)->InfoBit=(PROPERTY)
+/*设置任务体入口*/
+#define SET_TASK_ENTRY(PTCB,ENTRY) (PTCB)->PTask=(ENTRY)  
+/*得到任务状态*/
+#define GET_TASK_STATUS(PTCB)  ((PTCB)->OSTCBStat)
+/*设置任务ID*/
+#define SET_TASK_ID(PTCB,ID) (PTCB)->OSTCBId=(ID)
+/*设置任务状态*/
+#define SET_TASK_STATUS(PTCB,STATUS) (PTCB)->OSTCBStat = (STATUS) 
+
+/*得到任务本身优先级（任务ID）*/
+#define GET_TASK_ID(PTCB)  ((PTCB)->OSTCBId)
+
+
+/*判断任务是否就绪状态，1表示就绪，0表示非就绪*/
+#define IS_TASK_READY(PTCB) ( READY==(GET_TASK_STATUS(PTCB)&~RUN_READY) )
+
+/******************************************************************
+             得到任务运行优先级
+*********************************************************************/
+
+/******************************************************************
+             TCB中与内部资源相关的操作
+*********************************************************************/
+#ifdef OS_INT_RES
+
+/*得到任务的内部资源优先级*/
+#define GET_TASK_INT_RES(PTCB)  ((PTCB)->RunPrio)
+
+/*得到任务的保存的TCB指针*/
+#define GET_TASK_SAVED_TCB(PTCB)  ((PTCB)->SavedTCB)
+
+/*内部资源优先级的设置*/
+#define SET_TASK_INT_RES(PTcb,ResPrio) ((PTcb)->RunPrio)=ResPrio
+
+/*设置保存的TCB指针*/	
+#define RESET_TASK_SAVED_TCB(PTCB) \
+	OSTCBPrioTbl[GET_TASK_INT_RES(PTCB)]=GET_TASK_SAVED_TCB(PTCB)
+
+#else /*#ifdef OS_INT_RES*/
+#define RESET_TASK_SAVED_TCB(PTCB)	
+#define SET_TASK_INT_RES(PTcb,ResPrio) 
+#endif /*#define OS_INT_RES*/	
+/******************************************************************
+             TCB中与外部资源相关的操作
+*********************************************************************/
+#if defined(OS_OUT_RES)||defined(OS_RES_SCHEDULER)
+/*得到任务占有的外部资源链表的头指针*/
+#define GET_TASK_OUT_RES(PTCB) ((PTCB)->resources)
+/*设置任务占有的外部资源链表的头指针*/
+#define SET_TASK_OUT_RES(PTCB,Res) (PTCB)->resources=Res
+
+#endif /*#if defined(OS_OUT_RES)||defined(OS_RES_SCHEDULER)*/
+
+/**********************************************************************
+             TCB中与内部或外部资源相关的操作
+*************************************************************************/
+#if defined(OS_INT_RES) ||defined(OS_OUT_RES)||defined(OS_RES_SCHEDULER)
+#define GET_TASK_RUN_PRIO(PTCB) ((PTCB)->RunPrio)
+#define SET_TASK_RUN_PRIO(PTCB,PRIO) ((PTCB)->RunPrio)=((PriorityType)(PRIO) )
+#else/*#if defined(OS_INT_RES) ||defined(OS_OUT_RES)*/
+#define GET_TASK_RUN_PRIO(PTCB) GET_TASK_ID(PTCB)
+#define SET_TASK_RUN_PRIO(PTCB,PRIO) 
+#endif/*#if defined(OS_INT_RES) ||defined(OS_OUT_RES)*/
+/******************************************************************
+             TCB中与EVENT相关的操作
+*********************************************************************/
+
+#ifdef OS_EVENT_EN
+/*清除TCB中的设置过的所有事件*/
+#define CLEAR_TASK_EVENT(PTCB)  (PTCB)->SEvent=(NOSETEVENT)
+
+/*设置TCB中的触发的事件*/
+#define SET_TASK_SET_EVENT(PTCB,mask)  (PTCB)->SEvent|=(EventMaskType)(mask)
+
+/*设置TCB中的等待的事件*/
+#define SET_TASK_WAIT_EVENT(PTCB,mask)  (PTCB)->WEvent|=(EventMaskType)(mask)
+
+
+/*得到TCB中的触发的事件*/
+#define GET_TASK_SET_EVENT(PTCB)  ((PTCB)->SEvent)
+
+/*得到TCB中的等待的事件*/
+#define GET_TASK_WAIT_EVENT(PTCB)  ((PTCB)->WEvent)
+
+/*清除TCB中的设置过的MASK值为mask的事件*/
+#define CLERA_TASK_MASK_EVENT(PTCB,mask)  (PTCB)->SEvent&=(EventMaskType)(~Mask)
+
+
+#else/*#ifdef OS_EVENT_EN*/
+
+#define CLEAR_TASK_EVENT(PTCB)
+
+#define SET_TASK_EVENT(PTCB,SEvent)
+
+#endif /*#ifdef OS_EVENT_EN*/
+
+/************************************************************
+* 几个经常调用的相关的宏定义
+* SET_TASK_READY(TaskId,PTCB) 
+* SET_TASK_UNREADY(TaskId,PTCB,Status)
+* 两个参数为了保证可移植性
+****************************************************/
+#ifdef OS_STACK_INIT
+/*改变任务状态，并把任务放入就绪队列*//*这里还需要实现栈的初始化*/
+#define SET_TASK_READY(TaskId,PTCB) SET_TASK_STATUS(PTCB,READY);OS_TASK_TO_READY(TaskId,PTCB);SET_TASK_STK_INIT(PTCB)
+#else /*#ifdef OS_STACK_INIT*/
+/*改变任务状态，并把任务放入就绪队列*/
+#define SET_TASK_READY(TaskId,PTCB) SET_TASK_STATUS(PTCB,READY);OS_TASK_TO_READY(TaskId,PTCB)
+#endif/*#ifdef OS_STACK_INIT*/
+/*改变任务状态(Suspend/Waiting)，并把任务从就绪队列中去除*/
+#define SET_TASK_UNREADY(TaskId,PTCB,Status) SET_TASK_STATUS(PTCB,Status);OS_TASK_TO_UNREADY(TaskId,PTCB)
+
+
+
+
+
+/****************************************************************
+检查堆栈
+****************************************************************/
+#if defined(OS_CHECK_STACK)&&defined(OS_STACK_SEPARATE)&&defined(OS_CPU_MPC555)
+
+INT8U OSStackOverFlow(OSSTKRef StkBottom);
+#define OSCheckStack(PTCB)   \
+        do\
+        {\
+            if(OSStackOverFlow(GET_TASK_STK_BOTTOM(PTCB)))\
+            {\
+        	    OSEKPrintInt(GET_TASK_ID(PTCB));\
+        	    RETURN_OTHER_ERROR(E_OS_STACK);\
+            }\
+        }while(0)
+#else/*#if defined(OS_CHECK_STACK)&&defined(OS_EVENT_EN)*/
+#define OSCheckStack(PTCB) 
+#endif/*#ifdef  OS_CHECK_STACK*/     
+
+
 /*
 *********************************************************************************************************
 * 全局变量的声明
 *********************************************************************************************************
 */
 extern  OSTCBRef           OSTCBCur;                  /* 当前任务tcb指针          */
-extern  OSTCBRef           OSTCBPrioTbl[];/* 优先级索引的tcb指针数组  */
-extern  OSTCB              OSTCBTbl[];   /* TCB数组                  */
+extern  OSTCBRef           OSTCBPrioTbl[(OS_NUM_SYS_TASK)];/* 优先级索引的tcb指针数组  */
+extern  OSTCB              OSTCBTbl[(OS_NUM_SYS_TASK) ];   /* TCB数组                  */
 
 #ifndef OS_STACK_INIT 
 
@@ -180,9 +352,9 @@ void OSTaskRun(OSTCBRef PRunTcb);
 /*definetask的宏，第一个参数进行改变*/
 #define DefineTask(p1,p2,p3,p4,p5,p6) FuncDefineTask(Func##p1,p2,p3,p4,p5,p6)
 
-//#ifdef OS_ALARM_EN
+#ifdef OS_ALARM_EN
 void OSActivateTask(TaskType TaskId);
-//#endif
+#endif
 
 /*
 *********************************************************************************************************

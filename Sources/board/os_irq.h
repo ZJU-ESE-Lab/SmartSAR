@@ -172,11 +172,11 @@ typedef struct
 	OptionType option;	
 }OSISRCfg;
 
-//#ifdef OS_ISR_AUTO_DEFINE
-//void OSISRInit(void);
-//#else/*#ifdef OS_ISR_AUTO_DEFINE*/
-//#define OSISRInit()
-//#endif/*#ifdef OS_ISR_AUTO_DEFINE*/
+#ifdef OS_ISR_AUTO_DEFINE
+void OSISRInit(void);
+#else/*#ifdef OS_ISR_AUTO_DEFINE*/
+#define OSISRInit()
+#endif/*#ifdef OS_ISR_AUTO_DEFINE*/
 
 /*
 ******************************************************************
@@ -206,7 +206,7 @@ void ResumeAllInterrupts(void);
 void SuspendAllInterrupts(void);
 void SuspendOSInterrupts(void);
 void ResumeOSInterrupts(void);
-void OSISRInit(void);
+//void OSISRInit(void);
 
 
 #define ref_interrupt(NAME)\

@@ -25,7 +25,9 @@ extern AppModeType	ActiveAppMode;/*当前激活的APPMODE*/
 /*****************************************************************************
 *        系统堆栈
 *******************************************************************************/
+#if defined(OS_EXCEPTION_EN)|| defined(OS_ALARM_EN)
 extern OSSTKRef OSSTKSystem ;
+#endif/*#if defined(OS_EXCEPTION_EN)|| defined(OS_ALARM_EN)*/
 
 #define OSDEFAULTAPPMODE (AppModeType)0     /*系统默认APPMODE*/
 
@@ -208,23 +210,35 @@ ErrorHook
 #endif/*ifdef OSHOOKERROR*/
 
 
+
 /**********************************************************
 PreTaskHook
 ***********************************************************/
+#ifdef OS_HOOK_PRETASK
 void PreTaskHook(); /*OSPreTaskHook调用该PreTaskHook（os_core.c）*/
 
 #define OSPreTaskHook() PreTaskHook()
+#else/*#ifdef OS_HOOK_PRETASK*/
+
+#define OSPreTaskHook()
+#endif/*ifdef OS_HOOK_PRETASK*/
 
 /**********************************************************
 PostTaskHook
 ***********************************************************/
+#ifdef OS_HOOK_POSTTASK
   
 void PostTaskHook(void);
   	
 #define OSPostTaskHook() \
         PostTaskHook()
 
+
+#else /*#ifdef OS_HOOK_POSTTASK*/
+
+#define OSPostTaskHook()
         
+#endif/*ifdef OS_HOOK_POSTTASK*/ 
 
 /**********************************************************
 StartupHook
@@ -257,7 +271,7 @@ void ShutdownHook(StatusType error);
 void          OSInit(void);
 #endif/*#ifndef OS_TASK_AUTO_DEFINE*/
 
-//#if defined(OS_EXCEPTION_EN)|| defined(OS_ALARM_EN)
+#if defined(OS_EXCEPTION_EN)|| defined(OS_ALARM_EN)
 #define OSIntEnter() \
         asm inc OSIntNesting; \
         if(OSIntNesting == 1) \
@@ -267,6 +281,9 @@ void          OSInit(void);
         }
         
 void  OSIntExit(void);
+#else /*ifdef defined(OS_EXCEPTION_EN)|| defined(OS_ALARM_EN)*/
+#define OSIntExit()
+#endif/*ifdef defined(OS_EXCEPTION_EN)|| defined(OS_ALARM_EN)*/
 
 /*标准osek 的api*/
 void  StartOS (AppModeType mode );

@@ -21,10 +21,10 @@ AlarmType	Alarm7=&OSAlarms[7];
 const OSTaskCfg OSTaskCfgTbl[]=
 {
 /*  {Task entry, High stack addr, Low stack addr, ID,Runing Priority, Information}*/
-	{FuncTask1,&Task1Stack[Task1StackSize-2],Task1Stack,Task1Prio,Task1Prio,0|EXTENDED},/*Task1*/
-	{FuncTask2,&Task2Stack[Task2StackSize-2],Task2Stack,Task2Prio,Task2Prio,0},/*Task2*/
-	{FuncTask3,&Task3Stack[Task3StackSize-2],Task3Stack,Task3Prio,Task3Prio,0|EXTENDED|AUTO_START},/*Task3*/
-	{FuncTaskError,&TaskErrorStack[TaskErrorStackSize-2],TaskErrorStack,TaskErrorPrio,TaskErrorPrio,0},/*TaskError*/
+	{FuncTask1,&Task1Stack[Task1StackSize-2],Task1Stack,Task1Prio,Task1Prio,0|EXTENDED|AUTO_START},/*Task1*/
+	{FuncTask2,&Task2Stack[Task2StackSize-2],Task2Stack,Task2Prio,Task2Prio,0|FULL_SCHED|AUTO_START},/*Task2*/
+	{FuncTask3,&Task3Stack[Task3StackSize-2],Task3Stack,Task3Prio,Task3Prio,0|FULL_SCHED|EXTENDED|AUTO_START},/*Task3*/
+	{FuncTaskError,&TaskErrorStack[TaskErrorStackSize-2],TaskErrorStack,TaskErrorPrio,TaskErrorPrio,0|FULL_SCHED|AUTO_START},/*TaskError*/
 };
 const AlarmBaseType OSCounterCfgTbl[]=
 {
@@ -41,11 +41,11 @@ const OSAlarmCfg OSAlarmCfgTbl[]=
 {
 /*  {Counter,Auto start,Increment,Cycle,Task priority,EventMask,Callback}*/
 	{SystemTimer,0,0,0,TaskErrorPrio,NULL,NULL},/*AlarmError*/
-	{SystemTimer,0,0,0,Task1Prio,NULL,NULL},/*Alarm1*/
-	{SystemTimer,0,0,0,Task2Prio,NULL,NULL},/*Alarm2*/
-	{SystemTimer,0,0,0,Task3Prio,NULL,NULL},/*Alarm3*/
-	{SystemTimer,0,0,0,Task3Prio,&Event1,NULL},/*Alarm4*/
-	{SystemTimer,0,0,0,Task3Prio,&Event2,NULL},/*Alarm5*/
-	{SystemTimer,0,0,0,Task1Prio,NULL,NULL},/*Alarm6*/
-	{SystemTimer,0,0,0,Task2Prio,NULL,NULL},/*Alarm7*/
+	{SystemTimer,ALARM_AUTO_START,200000,2,Task1Prio,NULL,NULL},/*Alarm1*/
+	{SystemTimer,ALARM_AUTO_START,200000,2,Task2Prio,NULL,NULL},/*Alarm2*/
+	{SystemTimer,ALARM_AUTO_START,200000,2,Task3Prio,NULL,NULL},/*Alarm3*/
+	{SystemTimer,ALARM_AUTO_START,200000,2,Task3Prio,&Event1,NULL},/*Alarm4*/
+	{SystemTimer,ALARM_AUTO_START,200000,2,Task3Prio,&Event2,NULL},/*Alarm5*/
+	{SystemTimer,ALARM_AUTO_START,200000,2,Task1Prio,NULL,NULL},/*Alarm6*/
+	{SystemTimer,ALARM_AUTO_START,200000,2,Task2Prio,NULL,NULL},/*Alarm7*/
 };

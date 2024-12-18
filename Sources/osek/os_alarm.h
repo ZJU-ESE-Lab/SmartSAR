@@ -121,33 +121,89 @@ typedef struct AlarmOSCB
     TickType delta;     /*下一个触发点的tick值*/
     TickType cycle;     /*周期*/    
     TaskType task;      /*关联的任务*/
+#ifdef OS_ALARM_CALLBACK_EN
     OS_CALLBACK_ENTRY AlarmCallBack;   /*callback入口函数*/
+#endif /*#ifdef OS_ALARM_CALLBACK_EN*/
+    
+#ifdef OS_EVENT_EN
     EventMaskRefType event;  /*关联的事件掩码*/
+#endif /*#ifdef OS_EVENT_EN*/
+
     AlarmCBRef next;      /*指向关联的counter上面的下一个alarm*/
     AlarmCBRef prev;      /*为了链表的删除方便而设置该变量*/
     INT8U start;          /* 状态位，标志该Alarm是否启用, 0表示未被启用，非0相反 */
 
 }AlarmCB;
 
+/*********************************************************
+操作宏
+***********************************************************/
+#define GET_ALARM_COUNTER_HEAD(PALARM) (PALARM)->ctr->head
+#define GET_ALARM_COUNTER_VALUE(PALARM) (PALARM)->ctr->value
+#define GET_ALARM_COUNTER_MAXVALUE(PALARM) (PALARM)->ctr->CtrInfo->maxallowedvalue
+#define GET_ALARM_COUNTER_MINCYCLE(PALARM) (PALARM)->ctr->CtrInfo->mincycle
+#define GET_ALARM_DELTA(PALARM) (PALARM)->delta
+#define GET_NEXT_ALARM(PALARM) (PALARM)->next
+#define GET_PRV_ALARM(PALARM) (PALARM)->prev
+#define GET_ALARM_CYCLE(PALARM) (PALARM)->cycle
+#define GET_ALARM_EVENT(PALARM) (PALARM)->event
+#define GET_ALARM_TASK(PALARM) (PALARM)->task
+#define GET_ALARM_COUNTER_INFO(PALARM) (PALARM)->ctr->CtrInfo
+#define GET_ALARM_STATE(PALARM) (PALARM)->start
 
 
+#define SET_ALARM_COUNTER_HEAD(PALARM, ALM2SET) (PALARM)->ctr->head = (ALM2SET) 
+#define SET_ALARM_USED(PALARM) (PALARM)->start = AlarmUsed
+#define SET_ALARM_UNUSED(PALARM) (PALARM)->start = AlarmUnUsed
+/*把ALM2SET插入到PALARM所在counter的ALARM表的表头*/
+#define SET_ALARM_COUNTER_HEAD(PALARM, ALM2SET) (PALARM)->ctr->head = (ALM2SET)
+#define SET_NEXT_ALARM(PALARM, NXTALM) (PALARM)->next = (NXTALM)
+#define SET_PRV_ALARM(PALARM, PRVALM) (PALARM)->prev = (PRVALM)
+#define SET_ALARM_CYCLE(PALARM, CYCLE) (PALARM)->cycle = (CYCLE)
+#define SET_ALARM_DELTA(PALARM, DELTA) (PALARM)->delta = (DELTA)
+
+#define GET_COUNTER_VALUE(PCTR) (PCTR)->value
+#define GET_COUNTER_MAXVALUE(PCTR) (PCTR)->CtrInfo->maxallowedvalue
+#define GET_HEAD_ALARM(PCTR) (PCTR)->head
+#define GET_COUNTER_REMAIN_TICKS(PCTR) (PCTR)->RemainTicks
+
+
+#define SET_COUNTER_VALUE(PCTR, VALUE) (PCTR)->value = (VALUE)
+#define COUNTER_VALUE_GROW(PCTR) (PCTR)->value ++
+#define REMAIN_TICKS_DECREASE(PCTR);(PCTR)->RemainTicks --
+#define SET_HEAD_ALARM(PCTR, HDALARM) (PCTR)->head = (HDALARM)
+
+#define SET_ALARM_COUNTER_REMAIN_TICKS() 
+/*********************************************************
+全局变量申明
+***********************************************************/
 extern AlarmCB OSAlarms[];/*Alarm配置数组*/   
 extern CtrCB OSCounters[];/*Counter配置数组*/
+#ifdef OS_ALARM_AUTO_DEFINE
 void OSAlarmInit(void);
+#else
 CtrType DefineCounter(TickType  maxallowedvalue,
             TickType mincycle,         
             TickType ticksperbase);    /*OIL分析工具需要的函数，定义(配置)一个counter*/        
         
 AlarmType DefineAlarm(CtrType ci, TaskType id
+#ifdef OS_EVENT_EN
                     , EventMaskRefType event
+#endif/*#ifdef OS_EVENT_EN*/
+#ifdef OS_ALARM_CALLBACK_EN
                     , OS_CALLBACK_ENTRY callback
+#endif/*#ifdef OS_ALARM_CALLBACK_EN*/
                 ); /*定义一个alarm*/
 
 AlarmType DefineAutoAlarm(CtrType ci,TaskType id, 
+#ifdef OS_EVENT_EN
                     EventMaskRefType event,
+#endif/*#ifdef OS_EVENT_EN*/
+#ifdef OS_ALARM_CALLBACK_EN
                     OS_CALLBACK_ENTRY callback,
+#endif/*#ifdef OS_ALARM_CALLBACK_EN*/
                     TickType increment,TickType cycle);    /*定义一个自动启动的alarm*/
-
+#endif/*#ifdef OS_ALARM_AUTO_DEFINE*/
 StatusType GetAlarm( AlarmType AlarmID, TickRefType tick );
 StatusType CancelAlarm( AlarmType AlarmID );
 StatusType GetAlarmBase ( AlarmType AlarmID,AlarmBaseRefType Info );

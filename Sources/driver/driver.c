@@ -31,11 +31,9 @@ void BoardInit(void){
 
   SCI0Init();
   OSTickStart();  
-  /*
-  vInterface_ECTInit();
-  vInterface_ADInit();
-  vInterface_PIMInit();
-  */
+//  vInterface_ECTInit();
+ // vInterface_ADInit();
+//  vInterface_PIMInit();
 }
 
 

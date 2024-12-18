@@ -1,5 +1,5 @@
 
-PROGRAM "E:\yuliji\trail\CW Project_EXT\bin\demo.abs"
+PROGRAM "G:\2005.12.20任务管理代码分离\CW Project\bin\demo.abs"
 
 *********************************************************************************************
 TARGET SECTION
@@ -15,17 +15,16 @@ FILE SECTION
 STRING.C.o (ansib.lib)                  Model: BANKED,        Lang: ANSI-C
 rtshc12.c.o (ansib.lib)                 Model: BANKED,        Lang: ANSI-C
 driver.c.o                              Model: BANKED,        Lang: ANSI-C
-global.c.o                              Model: BANKED,        Lang: ANSI-C
+osek.c.o                                Model: BANKED,        Lang: ANSI-C
 main.c.o                                Model: BANKED,        Lang: ANSI-C
 START12.C.o                             Model: BANKED,        Lang: ANSI-C
 isr_vectors.c.o                         Model: BANKED,        Lang: ANSI-C
+os_cpu_c.c.o                            Model: BANKED,        Lang: ANSI-C
 test.c.o                                Model: BANKED,        Lang: ANSI-C
+test_api.c.o                            Model: BANKED,        Lang: ANSI-C
 IO_Map.C.o                              Model: BANKED,        Lang: ANSI-C
 SCI.c.o                                 Model: BANKED,        Lang: ANSI-C
 CRG.c.o                                 Model: BANKED,        Lang: ANSI-C
-test_api.c.o                            Model: BANKED,        Lang: ANSI-C
-os_cpu_c.c.o                            Model: BANKED,        Lang: ANSI-C
-osek.c.o                                Model: BANKED,        Lang: ANSI-C
 
 *********************************************************************************************
 STARTUP SECTION
@@ -34,11 +33,11 @@ Entry point: 0xC000 (_Startup)
 _startupData is allocated at 0xC012 and uses 24 Bytes
 extern struct _tagStartup {
   unsigned flags          0
-  _PFunc   main           0x4030    (main)
-  long     stackOffset    0x17A9
+  _PFunc   main           0x4A35    (main)
+  long     stackOffset    0x1734
   unsigned nofZeroOut     1
-  _Range   pZeroOut       0x1000     1706
-  _Copy    *toCopyDownBeg 0xC826
+  _Range   pZeroOut       0x1000     1589
+  _Copy    *toCopyDownBeg 0xC67E
   int      nofLibInits    0
   _LibInit *libInits      0xC02E
   int      nofInitBodies  0
@@ -53,12 +52,12 @@ Section Name                    Size  Type     From       To       Segment
 ---------------------------------------------------------------------------------------------
 .init                             18     R     0xC000     0xC011   ROM_C000
 .startData                        30     R     0xC012     0xC02F   ROM_C000
-.rodata                          567     R     0xC030     0xC266   ROM_C000
-.rodata1                         928     R     0xC267     0xC606   ROM_C000
-NON_BANKED                       543     R     0xC607     0xC825   ROM_C000
-.copy                             47     R     0xC826     0xC854   ROM_C000
-.text                           7382     R     0x4000     0x5CD5   ROM_4000
-.data                             41   R/W     0x1000     0x1028   
+.rodata                          505     R     0xC030     0xC228   ROM_C000
+.rodata1                         928     R     0xC229     0xC5C8   ROM_C000
+NON_BANKED                       181     R     0xC5C9     0xC67D   ROM_C000
+.copy                             36     R     0xC67E     0xC6A1   ROM_C000
+.text                           3730     R     0x4000     0x4E91   ROM_4000
+.data                             30   R/W     0x1000     0x101D   
 .abs_section_ff80                128     R     0xFF80     0xFFFF   .absSeg0
 .abs_section_3f                    1   N/I       0x3F       0x3F   .absSeg1
 .abs_section_8d                    1   N/I       0x8D       0x8D   .absSeg2
@@ -513,13 +512,13 @@ NON_BANKED                       543     R     0xC607     0xC825   ROM_C000
 .abs_section_2bb                   1   N/I      0x2BB      0x2BB   .absSeg451
 .abs_section_2bc                   1   N/I      0x2BC      0x2BC   .absSeg452
 .abs_section_2bf                   1   N/I      0x2BF      0x2BF   .absSeg453
-.bss                              26   R/W     0x1029     0x1042   
-.common                         1639   R/W     0x1043     0x16A9   
-.stack                           256   R/W     0x16AA     0x17A9   
+.bss                              18   R/W     0x101E     0x102F   
+.common                         1541   R/W     0x1030     0x1634   
+.stack                           256   R/W     0x1635     0x1734   
 
 Summary of section sizes per section type:
-READ_ONLY (R):        25AB (dec:     9643)
-READ_WRITE (R/W):      7AA (dec:     1962)
+READ_ONLY (R):        15B4 (dec:     5556)
+READ_WRITE (R/W):      735 (dec:     1845)
 NO_INIT (N/I):         1FB (dec:      507)
 
 *********************************************************************************************
@@ -537,100 +536,154 @@ MODULE:                 -- STRING.C.o (ansib.lib) --
 - VARIABLES:
 MODULE:                 -- rtshc12.c.o (ansib.lib) --
 - PROCEDURES:
-     _LSHRU                                    C607      11      17       1   NON_BANKED  
-     _LCMP                                     C618      19      25       2   NON_BANKED  
-     _LCMP_P                                   C631      15      21      19   NON_BANKED  
-     _LCOM                                     C646       9       9       1   NON_BANKED  
-     _LINC                                     C64F       5       5      11   NON_BANKED  
-     _LDEC                                     C654       8       8       4   NON_BANKED  
-     _FPCMP                                    C65C       8       8       1   NON_BANKED  
+     _LCMP                                     C5C9      19      25       1   NON_BANKED  
+     _LCMP_P                                   C5E2      15      21      15   NON_BANKED  
+     _LINC                                     C5F7       5       5       5   NON_BANKED  
+     _LDEC                                     C5FC       8       8       3   NON_BANKED  
+     _FPCMP                                    C604       8       8       1   NON_BANKED  
 - VARIABLES:
 MODULE:                 -- driver.c.o --
 - PROCEDURES:
      BoardInit                                 4026       9       9       2   .text       
 - VARIABLES:
-MODULE:                 -- global.c.o --
+MODULE:                 -- osek.c.o --
 - PROCEDURES:
-     ErrorHook                                 402F       1       1      30   .text       
+     OSTaskIdle                                402F       2       2       3   .text       
+     StartOS                                   4031      40      64       2   .text       
+     OSIntExit                                 4071      58      88       2   .text       
+     ShutdownOS                                40C9      29      41       4   .text       
+     OSTaskInit                                40F2     13B     315       5   .text       
+     TerminateTask                             422D      9C     156       8   .text       
+     OSActivateTask                            42C9      64     100       2   .text       
+     ResourceInit                              432D      12      18       2   .text       
+     OSSetEvent                                433F      87     135       2   .text       
+     OSAlarmInit                               43C6      98     152       2   .text       
+     OSInsertAlarm                             445E     128     296      11   .text       
+     OSDeleteAlarm                             4586      9F     159       2   .text       
+     OSCounterTrigger                          4625      61      97       2   .text       
+     OSCheckAlarms                             4686     14B     331       7   .text       
+     OSNotifyAlarm                             47D1      54      84       4   .text       
+     GetAlarmBase                              4825      35      53       2   .text       
+     GetAlarm                                  485A      77     119       2   .text       
+     SetRelAlarm                               48D1     133     307       3   .text       
+     CancelAlarm                               4A04      31      49       2   .text       
+     SuspendOSInterrupts                       C60C       C      12       2   NON_BANKED  
+     ResumeOSInterrupts                        C618       B      11       2   NON_BANKED  
+     OS_RTI_ISR                                C623      36      54       1   NON_BANKED  
 - VARIABLES:
-     extraStackSize                            C030       1       1       1   .rodata     
-     os_num_sys_task                           C031       1       1       4   .rodata     
-     os_rdy_tbl_size                           C032       1       1       1   .rodata     
-     os_max_task                               C033       1       1       1   .rodata     
-     os_num_out_res                            C034       1       1       1   .rodata     
-     os_num_isr                                C035       1       1       1   .rodata     
-     os_num_ctr                                C036       1       1       1   .rodata     
-     os_num_alarm                              C037       1       1       6   .rodata     
+     OSMapTbl                                  C030       8       8       2   .rodata     
+     OSUnMapTbl                                C038     100     256       3   .rodata     
      RES_SCHEDULER                             1000       2       2       2   .data       
-     OSISRCfgTbl                               1002       8       8       2   .data       
-     OsLastError                               1029       1       1      17   .bss        
-     OSIntNesting                              102A       1       1      11   .bss        
-     OSNestedErrorHook                         102B       1       1      55   .bss        
-     OSNestedHook                              102C       1       1      32   .bss        
-     OSTCBCur                                  102D       2       2      24   .bss        
-     OSRdyGrp                                  102F       1       1      35   .bss        
-     OSTCBPrioTbl                              1043       A      10      17   .common     
-     OSTCBTbl                                  104D      87     135      18   .common     
-     OSRdyTbl                                  10D4       1       1      22   .common     
-     OSResources                               10D5       7       7       5   .common     
-     OSResPrioTbl                              10DC       1       1       1   .common     
-     OSAlarms                                  10DD      B0     176      25   .common     
-     OSCounters                                118D       C      12       4   .common     
+     OsLastError                               101E       1       1       5   .bss        
+     OSIntNesting                              101F       1       1       8   .bss        
+     ActiveAppMode                             1020       1       1       1   .bss        
+     OSTCBCur                                  1021       2       2      15   .bss        
+     OSTCBOld                                  1023       2       2       5   .bss        
+     OSRdyGrp                                  1025       1       1      13   .bss        
+     OSSuspendCount                            1026       1       1       4   .bss        
+     OSResources                               1027       7       7       1   .bss        
+     OSTaskIdleStk                             1030     200     512       2   .common     
+     OSTCBPrioTbl                              1230       A      10       5   .common     
+     OSRdyTbl                                  123A       1       1      10   .common     
+     OSTCBTbl                                  123B      7D     125       5   .common     
+     ExtraStack                                12B8      64     100       2   .common     
+     FreeStkTop                                131C       2       2       1   .common     
+     FreeStkBottom                             131E       2       2       1   .common     
+     OSAlarms                                  1320      98     152      22   .common     
+     OSCounters                                13B8       C      12       4   .common     
+     ISRVector                                 13C4      C0     192       3   .common     
 MODULE:                 -- main.c.o --
 - PROCEDURES:
-     main                                      4030       A      10       0   .text       
+     main                                      4A35       A      10       0   .text       
 - VARIABLES:
-     OSTaskCfgTbl                              C038      28      40       1   .rodata     
-     OSCounterCfgTbl                           C060       C      12       1   .rodata     
-     OSAlarmCfgTbl                             C06C      80     128       1   .rodata     
-     Task3                                     100A       2       2       2   .data       
-     Event1                                    100C       4       4       5   .data       
-     Event2                                    1010       4       4       5   .data       
-     AlarmError                                1014       2       2       1   .data       
-     Alarm1                                    1016       2       2       4   .data       
-     Alarm2                                    1018       2       2       7   .data       
-     Alarm3                                    101A       2       2       5   .data       
-     Alarm4                                    101C       2       2       4   .data       
-     Alarm5                                    101E       2       2       2   .data       
-     Alarm6                                    1020       2       2      12   .data       
-     Alarm7                                    1022       2       2      12   .data       
-     Task1Stack                                1199      64     100       2   .common     
-     Task2Stack                                11FD      64     100       2   .common     
-     Task3Stack                                1261      64     100       2   .common     
-     TaskErrorStack                            12C5      64     100       2   .common     
+     OSTaskCfgTbl                              C138      28      40       1   .rodata     
+     OSCounterCfgTbl                           C160       C      12       1   .rodata     
+     OSAlarmCfgTbl                             C16C      80     128       1   .rodata     
+     Event1                                    1002       4       4       1   .data       
+     Event2                                    1006       4       4       1   .data       
+     AlarmError                                100A       2       2       2   .data       
+     Alarm1                                    100C       2       2       4   .data       
+     Alarm2                                    100E       2       2       4   .data       
+     Alarm3                                    1010       2       2       4   .data       
+     Alarm4                                    1012       2       2       4   .data       
+     Alarm5                                    1014       2       2       4   .data       
+     Alarm6                                    1016       2       2       4   .data       
+     Alarm7                                    1018       2       2       4   .data       
+     Task1Stack                                1484      64     100       2   .common     
+     Task2Stack                                14E8      64     100       2   .common     
+     Task3Stack                                154C      64     100       2   .common     
+     TaskErrorStack                            15B0      64     100       2   .common     
 MODULE:                 -- START12.C.o --
 - PROCEDURES:
-     Init                                      403A      29      41       2   .text       
+     Init                                      4A3F      29      41       2   .text       
      _Startup                                  C000      12      18       4   .init       
 - VARIABLES:
      _startupData                              C012      18      24       6   .startData  
 MODULE:                 -- isr_vectors.c.o --
 - PROCEDURES:
-     UnimplementedISR                          C664       2       2      58   NON_BANKED  
+     UnimplementedISR                          C659       2       2      58   NON_BANKED  
 - VARIABLES:
      _vect                                     FF80      80     128       0   .abs_section_ff80
+MODULE:                 -- os_cpu_c.c.o --
+- PROCEDURES:
+     OSTaskStkInit                             4A68      2D      45       4   .text       
+     OSTaskHighRun                             C65B       9       9       6   NON_BANKED  
+     OSTaskSwitch                              C664      11      17       1   NON_BANKED  
+     OSIntCtxSw                                C675       9       9       4   NON_BANKED  
+- VARIABLES:
 MODULE:                 -- test.c.o --
 - PROCEDURES:
-     CompareAndtestWrite                       4063       E      14      34   .text       
-     FuncTask1                                 4071      A6     166       2   .text       
-     FuncTask2                                 4117     20D     525      24   .text       
-     FuncTask3                                 4324     44E    1102      75   .text       
-     FuncTaskError                             4772       D      13       2   .text       
-     ShutdownHook                              477F       5       5       2   .text       
-     StartupHook                               4784       5       5       2   .text       
+     CompareAndtestWrite                       4A95       E      14       6   .text       
+     FuncTask1                                 4AA3      26      38       2   .text       
+     FuncTask2                                 4AC9      21      33       2   .text       
+     FuncTask3                                 4AEA     1A1     417      39   .text       
+     FuncTaskError                             4C8B      1B      27       2   .text       
+     ShutdownHook                              4CA6       5       5       2   .text       
+     StartupHook                               4CAB       5       5       2   .text       
 - VARIABLES:
-     TestName                                  C0EC      19      25       2   .rodata     
-     testExpectedResults                       C105      59      89       3   .rodata     
-     testSize                                  C15E       1       1       3   .rodata     
-     task1_run.1                               1024       1       1       7   .data       
-     task_state.2                              1025       1       1       2   .data       
-     task2_run.4                               1026       1       1      12   .data       
-     task_state.5                              1027       1       1       2   .data       
-     task3_run.7                               1028       1       1       8   .data       
-     task2_flag                                1030       1       1       9   .bss        
-     p_task_state.3                            1031       2       2       2   .bss        
-     p_task_state.6                            1033       2       2       2   .bss        
-     testCurrentResults                        1329      59      89       3   .common     
+     testExpectedResults                       C1EC      21      33       3   .rodata     
+     testSize                                  C20D       1       1       3   .rodata     
+     TestName                                  C20E      1B      27       2   .rodata     
+     task1_run.1                               101A       1       1       3   .data       
+     task2_run.2                               101B       1       1       3   .data       
+     task3_run.3                               101C       1       1       3   .data       
+     taskError_run.4                           101D       1       1       2   .data       
+     testCurrentResults                        1614      21      33       3   .common     
+MODULE:                 -- test_api.c.o --
+- PROCEDURES:
+     testInit                                  4CB0      43      67       2   .text       
+     testWrite                                 4CF3      1C      28      16   .text       
+     testCompare                               4D0F      D3     211       7   .text       
+- VARIABLES:
+     STRING......................1             C229      48      72       1   .rodata1    
+     STRING.........Test.Start...2             C271      48      72       1   .rodata1    
+     STRING........Test.running..3             C2B9      48      72       1   .rodata1    
+     STRING........Testprogram...4             C301      16      22       1   .rodata1    
+     STRING..Test.sub.Number...d.5             C317      2B      43       1   .rodata1    
+     STRING......................6             C342      48      72       1   .rodata1    
+     STRING....7                               C38A       3       3       1   .rodata1    
+     STRING.Buffer.Position.....8              C38D      14      20       1   .rodata1    
+     STRING....9                               C3A1       3       3       1   .rodata1    
+     STRING.End.of.the.Test...10               C3A4      12      18       1   .rodata1    
+     STRING...Error..11                        C3B6       9       9       1   .rodata1    
+     STRING.ExpectedResults.....12             C3BF      14      20       1   .rodata1    
+     STRING....13                              C3D3       3       3       1   .rodata1    
+     STRING.CurrentResults....14               C3D6      12      18       1   .rodata1    
+     STRING....15                              C3E8       3       3       1   .rodata1    
+     STRING...OK..16                           C3EB       6       6       1   .rodata1    
+     STRING.ExpectedResults...Cu.17            C3F1      24      36       1   .rodata1    
+     STRING....18                              C415       3       3       1   .rodata1    
+     STRING....19                              C418       3       3       1   .rodata1    
+     STRING......................20            C41B      48      72       1   .rodata1    
+     STRING.........Test.End.....21            C463      40      64       1   .rodata1    
+     STRING........Test.running..22            C4A3      48      72       1   .rodata1    
+     STRING........Test.program..23            C4EB      15      21       1   .rodata1    
+     STRING...being.executed.....24            C500      17      23       1   .rodata1    
+     STRING......................25            C517      48      72       1   .rodata1    
+     STRING....26                              C55F       3       3       1   .rodata1    
+     STRING................This..27            C562      32      50       1   .rodata1    
+     STRING................This..28            C594      32      50       1   .rodata1    
+     buffpos                                   102E       2       2       3   .bss        
 MODULE:                 -- IO_Map.C.o --
 - PROCEDURES:
 - VARIABLES:
@@ -692,7 +745,7 @@ MODULE:                 -- IO_Map.C.o --
      _INITEE                                     12       1       1       0   .abs_section_12
      _INITRG                                     11       1       1       0   .abs_section_11
      _INITRM                                     10       1       1       0   .abs_section_10
-     _INTCR                                      1E       1       1       1   .abs_section_1e
+     _INTCR                                      1E       1       1       0   .abs_section_1e
      _ITCR                                       15       1       1       0   .abs_section_15
      _ITEST                                      16       1       1       0   .abs_section_16
      _MCCTL                                      66       1       1       0   .abs_section_66
@@ -1089,149 +1142,60 @@ MODULE:                 -- IO_Map.C.o --
      _CAN4TXTBPR                                2BF       1       1       0   .abs_section_2bf
 MODULE:                 -- SCI.c.o --
 - PROCEDURES:
-     SCI0Init                                  4789       F      15       2   .text       
-     OSEKPrintChar                             4798       9       9       4   .text       
-     OSEKPrintString                           47A1      17      23       6   .text       
-     OSEKPrintInt                              47B8      78     120       6   .text       
+     SCI0Init                                  4DE2       F      15       2   .text       
+     OSEKPrintChar                             4DF1       9       9       4   .text       
+     OSEKPrintString                           4DFA      17      23       6   .text       
+     OSEKPrintInt                              4E11      78     120       6   .text       
 - VARIABLES:
-     STRING....1                               C267       3       3       1   .rodata1    
+     STRING....1                               C5C6       3       3       1   .rodata1    
 MODULE:                 -- CRG.c.o --
 - PROCEDURES:
-     OSTickStart                               4830       9       9       2   .text       
+     OSTickStart                               4E89       9       9       2   .text       
 - VARIABLES:
-MODULE:                 -- test_api.c.o --
-- PROCEDURES:
-     testInit                                  4839      43      67       2   .text       
-     testWrite                                 487C      1C      28      18   .text       
-     testCompare                               4898      D3     211       7   .text       
-- VARIABLES:
-     STRING......................1             C26A      48      72       1   .rodata1    
-     STRING.........Test.Start...2             C2B2      48      72       1   .rodata1    
-     STRING........Test.running..3             C2FA      48      72       1   .rodata1    
-     STRING........Testprogram...4             C342      16      22       1   .rodata1    
-     STRING..Test.sub.Number...d.5             C358      2B      43       1   .rodata1    
-     STRING......................6             C383      48      72       1   .rodata1    
-     STRING....7                               C3CB       3       3       1   .rodata1    
-     STRING.Buffer.Position.....8              C3CE      14      20       1   .rodata1    
-     STRING....9                               C3E2       3       3       1   .rodata1    
-     STRING.End.of.the.Test...10               C3E5      12      18       1   .rodata1    
-     STRING...Error..11                        C3F7       9       9       1   .rodata1    
-     STRING.ExpectedResults.....12             C400      14      20       1   .rodata1    
-     STRING....13                              C414       3       3       1   .rodata1    
-     STRING.CurrentResults....14               C417      12      18       1   .rodata1    
-     STRING....15                              C429       3       3       1   .rodata1    
-     STRING...OK..16                           C42C       6       6       1   .rodata1    
-     STRING.ExpectedResults...Cu.17            C432      24      36       1   .rodata1    
-     STRING....18                              C456       3       3       1   .rodata1    
-     STRING....19                              C459       3       3       1   .rodata1    
-     STRING......................20            C45C      48      72       1   .rodata1    
-     STRING.........Test.End.....21            C4A4      40      64       1   .rodata1    
-     STRING........Test.running..22            C4E4      48      72       1   .rodata1    
-     STRING........Test.program..23            C52C      15      21       1   .rodata1    
-     STRING...being.executed.....24            C541      17      23       1   .rodata1    
-     STRING......................25            C558      48      72       1   .rodata1    
-     STRING....26                              C5A0       3       3       1   .rodata1    
-     STRING................This..27            C5A3      32      50       1   .rodata1    
-     STRING................This..28            C5D5      32      50       1   .rodata1    
-     buffpos                                   1035       2       2       3   .bss        
-MODULE:                 -- os_cpu_c.c.o --
-- PROCEDURES:
-     OSTaskStkInit                             496B      2D      45       6   .text       
-     OSTaskHighRun                             C666       9       9       6   NON_BANKED  
-     OSTaskSwitch                              C66F      11      17       1   NON_BANKED  
-     OSIntCtxSw                                C680       9       9       4   NON_BANKED  
-- VARIABLES:
-MODULE:                 -- osek.c.o --
-- PROCEDURES:
-     OSTaskIdle                                4998       2       2       3   .text       
-     StartOS                                   499A      97     151       2   .text       
-     ShutdownOS                                4A31      29      41       4   .text       
-     OSTaskInit                                4A5A     12E     302       3   .text       
-     TerminateTask                             4B88     181     385       7   .text       
-     GetTaskState                              4D09      67     103       4   .text       
-     Schedule                                  4D70     18B     395      13   .text       
-     OSActivateTask                            4EFB      A5     165       3   .text       
-     ResourceInit                              4FA0      4F      79       2   .text       
-     ClearEvent                                4FEF      9E     158       4   .text       
-     WaitEvent                                 508D     1DC     476       8   .text       
-     OSSetEvent                                5269      D0     208       2   .text       
-     OSAlarmInit                               5339      A9     169       2   .text       
-     OSInsertAlarm                             53E2     12D     301      14   .text       
-     OSDeleteAlarm                             550F      A6     166       2   .text       
-     OSCounterTrigger                          55B5      61      97       2   .text       
-     OSCheckAlarms                             5616     151     337       9   .text       
-     OSNotifyAlarm                             5767      69     105       6   .text       
-     GetAlarmBase                              57D0      62      98       2   .text       
-     GetAlarm                                  5832      CC     204       4   .text       
-     SetRelAlarm                               58FE     1A9     425      54   .text       
-     SetAbsAlarm                               5AA7     1A7     423      30   .text       
-     CancelAlarm                               5C4E      88     136      14   .text       
-     OSISRInit                                 C689      AC     172       2   NON_BANKED  
-     OSIntExit                                 C735      A4     164       3   NON_BANKED  
-     SuspendOSInterrupts                       C7D9       C      12      44   NON_BANKED  
-     ResumeOSInterrupts                        C7E5       B      11      44   NON_BANKED  
-     OS_RTI_ISR                                C7F0      36      54       1   NON_BANKED  
-- VARIABLES:
-     OSMapTbl                                  C15F       8       8       2   .rodata     
-     OSUnMapTbl                                C167     100     256       5   .rodata     
-     ActiveAppMode                             1037       1       1       1   .bss        
-     OSTCBOld                                  1038       2       2       7   .bss        
-     OSSuspendCount                            103A       1       1       4   .bss        
-     OSISRCategory2Mask                        103B       8       8       6   .bss        
-     OSTaskIdleStk                             1382     200     512       2   .common     
-     FreeStkTop                                1582       2       2       1   .common     
-     ExtraStack                                1584      64     100       2   .common     
-     FreeStkBottom                             15E8       2       2       1   .common     
-     ISRVector                                 15EA      C0     192       7   .common     
 
 *********************************************************************************************
 MODULE STATISTIC
   Name                                      Data   Code  Const
 ---------------------------------------------------------------------------------------------
   STRING.C.o (ansib.lib)                       0     38      0
-  rtshc12.c.o (ansib.lib)                      0     93      0
+  rtshc12.c.o (ansib.lib)                      0     67      0
   driver.c.o                                   0      9      0
-  global.c.o                                 359      1      8
-  main.c.o                                   426     10    180
+  osek.c.o                                  1126   2643    264
+  main.c.o                                   424     10    180
   START12.C.o                                  0     59      0
   isr_vectors.c.o                              0      2    128
-  test.c.o                                    99   1830    115
+  os_cpu_c.c.o                                 0     80      0
+  test.c.o                                    37    539     61
+  test_api.c.o                                 2    306    925
   IO_Map.C.o                                 507      0      0
   SCI.c.o                                      0    167      3
   CRG.c.o                                      0      9      0
-  test_api.c.o                                 2    306    925
-  os_cpu_c.c.o                                 0     80      0
-  osek.c.o                                   820   5339    264
-  other                                      256     30     47
+  other                                      256     30     36
 
 *********************************************************************************************
 SECTION USE IN OBJECT-ALLOCATION SECTION
 ---------------------------------------------------------------------------------------------
 SECTION: ".text"
-  memcpy BoardInit ErrorHook main Init CompareAndtestWrite FuncTask1 FuncTask2 
-  FuncTask3 FuncTaskError ShutdownHook StartupHook SCI0Init OSEKPrintChar 
-  OSEKPrintString OSEKPrintInt OSTickStart testInit testWrite testCompare 
-  OSTaskStkInit OSTaskIdle StartOS ShutdownOS OSTaskInit TerminateTask 
-  GetTaskState Schedule OSActivateTask ResourceInit ClearEvent WaitEvent 
-  OSSetEvent OSAlarmInit OSInsertAlarm OSDeleteAlarm OSCounterTrigger 
-  OSCheckAlarms OSNotifyAlarm GetAlarmBase GetAlarm SetRelAlarm SetAbsAlarm 
-  CancelAlarm 
+  memcpy BoardInit OSTaskIdle StartOS OSIntExit ShutdownOS OSTaskInit 
+  TerminateTask OSActivateTask ResourceInit OSSetEvent OSAlarmInit 
+  OSInsertAlarm OSDeleteAlarm OSCounterTrigger OSCheckAlarms OSNotifyAlarm 
+  GetAlarmBase GetAlarm SetRelAlarm CancelAlarm main Init OSTaskStkInit 
+  CompareAndtestWrite FuncTask1 FuncTask2 FuncTask3 FuncTaskError ShutdownHook 
+  StartupHook testInit testWrite testCompare SCI0Init OSEKPrintChar 
+  OSEKPrintString OSEKPrintInt OSTickStart 
 SECTION: ".data"
-  RES_SCHEDULER OSISRCfgTbl Task3 Event1 Event2 AlarmError Alarm1 Alarm2 
-  Alarm3 Alarm4 Alarm5 Alarm6 Alarm7 task1_run.1 task_state.2 task2_run.4 
-  task_state.5 task3_run.7 
+  RES_SCHEDULER Event1 Event2 AlarmError Alarm1 Alarm2 Alarm3 Alarm4 Alarm5 
+  Alarm6 Alarm7 task1_run.1 task2_run.2 task3_run.3 taskError_run.4 
 SECTION: ".bss"
-  OsLastError OSIntNesting OSNestedErrorHook OSNestedHook OSTCBCur OSRdyGrp 
-  task2_flag p_task_state.3 p_task_state.6 buffpos ActiveAppMode OSTCBOld 
-  OSSuspendCount OSISRCategory2Mask 
+  OsLastError OSIntNesting ActiveAppMode OSTCBCur OSTCBOld OSRdyGrp 
+  OSSuspendCount OSResources buffpos 
 SECTION: ".init"
   _Startup 
 SECTION: ".rodata"
-  extraStackSize os_num_sys_task os_rdy_tbl_size os_max_task os_num_out_res 
-  os_num_isr os_num_ctr os_num_alarm OSTaskCfgTbl OSCounterCfgTbl OSAlarmCfgTbl 
-  TestName testExpectedResults testSize OSMapTbl OSUnMapTbl 
+  OSMapTbl OSUnMapTbl OSTaskCfgTbl OSCounterCfgTbl OSAlarmCfgTbl 
+  testExpectedResults testSize TestName 
 SECTION: ".rodata1"
-  STRING....1 STRING......................1 STRING.........Test.Start...2 
+  STRING......................1 STRING.........Test.Start...2 
   STRING........Test.running..3 STRING........Testprogram...4 
   STRING..Test.sub.Number...d.5 STRING......................6 STRING....7 
   STRING.Buffer.Position.....8 STRING....9 STRING.End.of.the.Test...10 
@@ -1241,15 +1205,14 @@ SECTION: ".rodata1"
   STRING......................20 STRING.........Test.End.....21 
   STRING........Test.running..22 STRING........Test.program..23 
   STRING...being.executed.....24 STRING......................25 STRING....26 
-  STRING................This..27 STRING................This..28 
+  STRING................This..27 STRING................This..28 STRING....1 
 SECTION: "NON_BANKED"
-  _LSHRU _LCMP _LCMP_P _LCOM _LINC _LDEC _FPCMP UnimplementedISR OSTaskHighRun 
-  OSTaskSwitch OSIntCtxSw OSISRInit OSIntExit SuspendOSInterrupts 
-  ResumeOSInterrupts OS_RTI_ISR 
+  _LCMP _LCMP_P _LINC _LDEC _FPCMP SuspendOSInterrupts ResumeOSInterrupts 
+  OS_RTI_ISR UnimplementedISR OSTaskHighRun OSTaskSwitch OSIntCtxSw 
 SECTION: ".common"
-  OSTCBPrioTbl OSTCBTbl OSRdyTbl OSResources OSResPrioTbl OSAlarms OSCounters 
-  Task1Stack Task2Stack Task3Stack TaskErrorStack testCurrentResults 
-  OSTaskIdleStk FreeStkTop ExtraStack FreeStkBottom ISRVector 
+  OSTaskIdleStk OSTCBPrioTbl OSRdyTbl OSTCBTbl ExtraStack FreeStkTop 
+  FreeStkBottom OSAlarms OSCounters ISRVector Task1Stack Task2Stack Task3Stack 
+  TaskErrorStack testCurrentResults 
 SECTION: ".abs_section_ff80"
   _vect 
 SECTION: ".abs_section_3f"
@@ -2184,7 +2147,7 @@ OBJECT LIST SORTED BY ADDRESS
      _PARTIDL                                    1B       1       1       0   .abs_section_1b
      _MEMSIZ0                                    1C       1       1       0   .abs_section_1c
      _MEMSIZ1                                    1D       1       1       0   .abs_section_1d
-     _INTCR                                      1E       1       1       1   .abs_section_1e
+     _INTCR                                      1E       1       1       0   .abs_section_1e
      _HPRIO                                      1F       1       1       0   .abs_section_1f
      _BKPCT0                                     28       1       1       0   .abs_section_28
      _BKPCT1                                     29       1       1       0   .abs_section_29
@@ -2614,160 +2577,133 @@ OBJECT LIST SORTED BY ADDRESS
      _CAN4TXDLR                                 2BC       1       1       0   .abs_section_2bc
      _CAN4TXTBPR                                2BF       1       1       0   .abs_section_2bf
      RES_SCHEDULER                             1000       2       2       2   .data       
-     OSISRCfgTbl                               1002       8       8       2   .data       
-     Task3                                     100A       2       2       2   .data       
-     Event1                                    100C       4       4       5   .data       
-     Event2                                    1010       4       4       5   .data       
-     AlarmError                                1014       2       2       1   .data       
-     Alarm1                                    1016       2       2       4   .data       
-     Alarm2                                    1018       2       2       7   .data       
-     Alarm3                                    101A       2       2       5   .data       
-     Alarm4                                    101C       2       2       4   .data       
-     Alarm5                                    101E       2       2       2   .data       
-     Alarm6                                    1020       2       2      12   .data       
-     Alarm7                                    1022       2       2      12   .data       
-     task1_run.1                               1024       1       1       7   .data       
-     task_state.2                              1025       1       1       2   .data       
-     task2_run.4                               1026       1       1      12   .data       
-     task_state.5                              1027       1       1       2   .data       
-     task3_run.7                               1028       1       1       8   .data       
-     OsLastError                               1029       1       1      17   .bss        
-     OSIntNesting                              102A       1       1      11   .bss        
-     OSNestedErrorHook                         102B       1       1      55   .bss        
-     OSNestedHook                              102C       1       1      32   .bss        
-     OSTCBCur                                  102D       2       2      24   .bss        
-     OSRdyGrp                                  102F       1       1      35   .bss        
-     task2_flag                                1030       1       1       9   .bss        
-     p_task_state.3                            1031       2       2       2   .bss        
-     p_task_state.6                            1033       2       2       2   .bss        
-     buffpos                                   1035       2       2       3   .bss        
-     ActiveAppMode                             1037       1       1       1   .bss        
-     OSTCBOld                                  1038       2       2       7   .bss        
-     OSSuspendCount                            103A       1       1       4   .bss        
-     OSISRCategory2Mask                        103B       8       8       6   .bss        
-     OSTCBPrioTbl                              1043       A      10      17   .common     
-     OSTCBTbl                                  104D      87     135      18   .common     
-     OSRdyTbl                                  10D4       1       1      22   .common     
-     OSResources                               10D5       7       7       5   .common     
-     OSResPrioTbl                              10DC       1       1       1   .common     
-     OSAlarms                                  10DD      B0     176      25   .common     
-     OSCounters                                118D       C      12       4   .common     
-     Task1Stack                                1199      64     100       2   .common     
-     Task2Stack                                11FD      64     100       2   .common     
-     Task3Stack                                1261      64     100       2   .common     
-     TaskErrorStack                            12C5      64     100       2   .common     
-     testCurrentResults                        1329      59      89       3   .common     
-     OSTaskIdleStk                             1382     200     512       2   .common     
-     FreeStkTop                                1582       2       2       1   .common     
-     ExtraStack                                1584      64     100       2   .common     
-     FreeStkBottom                             15E8       2       2       1   .common     
-     ISRVector                                 15EA      C0     192       7   .common     
+     Event1                                    1002       4       4       1   .data       
+     Event2                                    1006       4       4       1   .data       
+     AlarmError                                100A       2       2       2   .data       
+     Alarm1                                    100C       2       2       4   .data       
+     Alarm2                                    100E       2       2       4   .data       
+     Alarm3                                    1010       2       2       4   .data       
+     Alarm4                                    1012       2       2       4   .data       
+     Alarm5                                    1014       2       2       4   .data       
+     Alarm6                                    1016       2       2       4   .data       
+     Alarm7                                    1018       2       2       4   .data       
+     task1_run.1                               101A       1       1       3   .data       
+     task2_run.2                               101B       1       1       3   .data       
+     task3_run.3                               101C       1       1       3   .data       
+     taskError_run.4                           101D       1       1       2   .data       
+     OsLastError                               101E       1       1       5   .bss        
+     OSIntNesting                              101F       1       1       8   .bss        
+     ActiveAppMode                             1020       1       1       1   .bss        
+     OSTCBCur                                  1021       2       2      15   .bss        
+     OSTCBOld                                  1023       2       2       5   .bss        
+     OSRdyGrp                                  1025       1       1      13   .bss        
+     OSSuspendCount                            1026       1       1       4   .bss        
+     OSResources                               1027       7       7       1   .bss        
+     buffpos                                   102E       2       2       3   .bss        
+     OSTaskIdleStk                             1030     200     512       2   .common     
+     OSTCBPrioTbl                              1230       A      10       5   .common     
+     OSRdyTbl                                  123A       1       1      10   .common     
+     OSTCBTbl                                  123B      7D     125       5   .common     
+     ExtraStack                                12B8      64     100       2   .common     
+     FreeStkTop                                131C       2       2       1   .common     
+     FreeStkBottom                             131E       2       2       1   .common     
+     OSAlarms                                  1320      98     152      22   .common     
+     OSCounters                                13B8       C      12       4   .common     
+     ISRVector                                 13C4      C0     192       3   .common     
+     Task1Stack                                1484      64     100       2   .common     
+     Task2Stack                                14E8      64     100       2   .common     
+     Task3Stack                                154C      64     100       2   .common     
+     TaskErrorStack                            15B0      64     100       2   .common     
+     testCurrentResults                        1614      21      33       3   .common     
      memcpy                                    4000      26      38       2   .text       
      BoardInit                                 4026       9       9       2   .text       
-     ErrorHook                                 402F       1       1      30   .text       
-     main                                      4030       A      10       0   .text       
-     Init                                      403A      29      41       2   .text       
-     CompareAndtestWrite                       4063       E      14      34   .text       
-     FuncTask1                                 4071      A6     166       2   .text       
-     FuncTask2                                 4117     20D     525      24   .text       
-     FuncTask3                                 4324     44E    1102      75   .text       
-     FuncTaskError                             4772       D      13       2   .text       
-     ShutdownHook                              477F       5       5       2   .text       
-     StartupHook                               4784       5       5       2   .text       
-     SCI0Init                                  4789       F      15       2   .text       
-     OSEKPrintChar                             4798       9       9       4   .text       
-     OSEKPrintString                           47A1      17      23       6   .text       
-     OSEKPrintInt                              47B8      78     120       6   .text       
-     OSTickStart                               4830       9       9       2   .text       
-     testInit                                  4839      43      67       2   .text       
-     testWrite                                 487C      1C      28      18   .text       
-     testCompare                               4898      D3     211       7   .text       
-     OSTaskStkInit                             496B      2D      45       6   .text       
-     OSTaskIdle                                4998       2       2       3   .text       
-     StartOS                                   499A      97     151       2   .text       
-     ShutdownOS                                4A31      29      41       4   .text       
-     OSTaskInit                                4A5A     12E     302       3   .text       
-     TerminateTask                             4B88     181     385       7   .text       
-     GetTaskState                              4D09      67     103       4   .text       
-     Schedule                                  4D70     18B     395      13   .text       
-     OSActivateTask                            4EFB      A5     165       3   .text       
-     ResourceInit                              4FA0      4F      79       2   .text       
-     ClearEvent                                4FEF      9E     158       4   .text       
-     WaitEvent                                 508D     1DC     476       8   .text       
-     OSSetEvent                                5269      D0     208       2   .text       
-     OSAlarmInit                               5339      A9     169       2   .text       
-     OSInsertAlarm                             53E2     12D     301      14   .text       
-     OSDeleteAlarm                             550F      A6     166       2   .text       
-     OSCounterTrigger                          55B5      61      97       2   .text       
-     OSCheckAlarms                             5616     151     337       9   .text       
-     OSNotifyAlarm                             5767      69     105       6   .text       
-     GetAlarmBase                              57D0      62      98       2   .text       
-     GetAlarm                                  5832      CC     204       4   .text       
-     SetRelAlarm                               58FE     1A9     425      54   .text       
-     SetAbsAlarm                               5AA7     1A7     423      30   .text       
-     CancelAlarm                               5C4E      88     136      14   .text       
+     OSTaskIdle                                402F       2       2       3   .text       
+     StartOS                                   4031      40      64       2   .text       
+     OSIntExit                                 4071      58      88       2   .text       
+     ShutdownOS                                40C9      29      41       4   .text       
+     OSTaskInit                                40F2     13B     315       5   .text       
+     TerminateTask                             422D      9C     156       8   .text       
+     OSActivateTask                            42C9      64     100       2   .text       
+     ResourceInit                              432D      12      18       2   .text       
+     OSSetEvent                                433F      87     135       2   .text       
+     OSAlarmInit                               43C6      98     152       2   .text       
+     OSInsertAlarm                             445E     128     296      11   .text       
+     OSDeleteAlarm                             4586      9F     159       2   .text       
+     OSCounterTrigger                          4625      61      97       2   .text       
+     OSCheckAlarms                             4686     14B     331       7   .text       
+     OSNotifyAlarm                             47D1      54      84       4   .text       
+     GetAlarmBase                              4825      35      53       2   .text       
+     GetAlarm                                  485A      77     119       2   .text       
+     SetRelAlarm                               48D1     133     307       3   .text       
+     CancelAlarm                               4A04      31      49       2   .text       
+     main                                      4A35       A      10       0   .text       
+     Init                                      4A3F      29      41       2   .text       
+     OSTaskStkInit                             4A68      2D      45       4   .text       
+     CompareAndtestWrite                       4A95       E      14       6   .text       
+     FuncTask1                                 4AA3      26      38       2   .text       
+     FuncTask2                                 4AC9      21      33       2   .text       
+     FuncTask3                                 4AEA     1A1     417      39   .text       
+     FuncTaskError                             4C8B      1B      27       2   .text       
+     ShutdownHook                              4CA6       5       5       2   .text       
+     StartupHook                               4CAB       5       5       2   .text       
+     testInit                                  4CB0      43      67       2   .text       
+     testWrite                                 4CF3      1C      28      16   .text       
+     testCompare                               4D0F      D3     211       7   .text       
+     SCI0Init                                  4DE2       F      15       2   .text       
+     OSEKPrintChar                             4DF1       9       9       4   .text       
+     OSEKPrintString                           4DFA      17      23       6   .text       
+     OSEKPrintInt                              4E11      78     120       6   .text       
+     OSTickStart                               4E89       9       9       2   .text       
      _Startup                                  C000      12      18       4   .init       
-     extraStackSize                            C030       1       1       1   .rodata     
-     os_num_sys_task                           C031       1       1       4   .rodata     
-     os_rdy_tbl_size                           C032       1       1       1   .rodata     
-     os_max_task                               C033       1       1       1   .rodata     
-     os_num_out_res                            C034       1       1       1   .rodata     
-     os_num_isr                                C035       1       1       1   .rodata     
-     os_num_ctr                                C036       1       1       1   .rodata     
-     os_num_alarm                              C037       1       1       6   .rodata     
-     OSTaskCfgTbl                              C038      28      40       1   .rodata     
-     OSCounterCfgTbl                           C060       C      12       1   .rodata     
-     OSAlarmCfgTbl                             C06C      80     128       1   .rodata     
-     TestName                                  C0EC      19      25       2   .rodata     
-     testExpectedResults                       C105      59      89       3   .rodata     
-     testSize                                  C15E       1       1       3   .rodata     
-     OSMapTbl                                  C15F       8       8       2   .rodata     
-     OSUnMapTbl                                C167     100     256       5   .rodata     
-     STRING....1                               C267       3       3       1   .rodata1    
-     STRING......................1             C26A      48      72       1   .rodata1    
-     STRING.........Test.Start...2             C2B2      48      72       1   .rodata1    
-     STRING........Test.running..3             C2FA      48      72       1   .rodata1    
-     STRING........Testprogram...4             C342      16      22       1   .rodata1    
-     STRING..Test.sub.Number...d.5             C358      2B      43       1   .rodata1    
-     STRING......................6             C383      48      72       1   .rodata1    
-     STRING....7                               C3CB       3       3       1   .rodata1    
-     STRING.Buffer.Position.....8              C3CE      14      20       1   .rodata1    
-     STRING....9                               C3E2       3       3       1   .rodata1    
-     STRING.End.of.the.Test...10               C3E5      12      18       1   .rodata1    
-     STRING...Error..11                        C3F7       9       9       1   .rodata1    
-     STRING.ExpectedResults.....12             C400      14      20       1   .rodata1    
-     STRING....13                              C414       3       3       1   .rodata1    
-     STRING.CurrentResults....14               C417      12      18       1   .rodata1    
-     STRING....15                              C429       3       3       1   .rodata1    
-     STRING...OK..16                           C42C       6       6       1   .rodata1    
-     STRING.ExpectedResults...Cu.17            C432      24      36       1   .rodata1    
-     STRING....18                              C456       3       3       1   .rodata1    
-     STRING....19                              C459       3       3       1   .rodata1    
-     STRING......................20            C45C      48      72       1   .rodata1    
-     STRING.........Test.End.....21            C4A4      40      64       1   .rodata1    
-     STRING........Test.running..22            C4E4      48      72       1   .rodata1    
-     STRING........Test.program..23            C52C      15      21       1   .rodata1    
-     STRING...being.executed.....24            C541      17      23       1   .rodata1    
-     STRING......................25            C558      48      72       1   .rodata1    
-     STRING....26                              C5A0       3       3       1   .rodata1    
-     STRING................This..27            C5A3      32      50       1   .rodata1    
-     STRING................This..28            C5D5      32      50       1   .rodata1    
-     _LSHRU                                    C607      11      17       1   NON_BANKED  
-     _LCMP                                     C618      19      25       2   NON_BANKED  
-     _LCMP_P                                   C631      15      21      19   NON_BANKED  
-     _LCOM                                     C646       9       9       1   NON_BANKED  
-     _LINC                                     C64F       5       5      11   NON_BANKED  
-     _LDEC                                     C654       8       8       4   NON_BANKED  
-     _FPCMP                                    C65C       8       8       1   NON_BANKED  
-     UnimplementedISR                          C664       2       2      58   NON_BANKED  
-     OSTaskHighRun                             C666       9       9       6   NON_BANKED  
-     OSTaskSwitch                              C66F      11      17       1   NON_BANKED  
-     OSIntCtxSw                                C680       9       9       4   NON_BANKED  
-     OSISRInit                                 C689      AC     172       2   NON_BANKED  
-     OSIntExit                                 C735      A4     164       3   NON_BANKED  
-     SuspendOSInterrupts                       C7D9       C      12      44   NON_BANKED  
-     ResumeOSInterrupts                        C7E5       B      11      44   NON_BANKED  
-     OS_RTI_ISR                                C7F0      36      54       1   NON_BANKED  
+     OSMapTbl                                  C030       8       8       2   .rodata     
+     OSUnMapTbl                                C038     100     256       3   .rodata     
+     OSTaskCfgTbl                              C138      28      40       1   .rodata     
+     OSCounterCfgTbl                           C160       C      12       1   .rodata     
+     OSAlarmCfgTbl                             C16C      80     128       1   .rodata     
+     testExpectedResults                       C1EC      21      33       3   .rodata     
+     testSize                                  C20D       1       1       3   .rodata     
+     TestName                                  C20E      1B      27       2   .rodata     
+     STRING......................1             C229      48      72       1   .rodata1    
+     STRING.........Test.Start...2             C271      48      72       1   .rodata1    
+     STRING........Test.running..3             C2B9      48      72       1   .rodata1    
+     STRING........Testprogram...4             C301      16      22       1   .rodata1    
+     STRING..Test.sub.Number...d.5             C317      2B      43       1   .rodata1    
+     STRING......................6             C342      48      72       1   .rodata1    
+     STRING....7                               C38A       3       3       1   .rodata1    
+     STRING.Buffer.Position.....8              C38D      14      20       1   .rodata1    
+     STRING....9                               C3A1       3       3       1   .rodata1    
+     STRING.End.of.the.Test...10               C3A4      12      18       1   .rodata1    
+     STRING...Error..11                        C3B6       9       9       1   .rodata1    
+     STRING.ExpectedResults.....12             C3BF      14      20       1   .rodata1    
+     STRING....13                              C3D3       3       3       1   .rodata1    
+     STRING.CurrentResults....14               C3D6      12      18       1   .rodata1    
+     STRING....15                              C3E8       3       3       1   .rodata1    
+     STRING...OK..16                           C3EB       6       6       1   .rodata1    
+     STRING.ExpectedResults...Cu.17            C3F1      24      36       1   .rodata1    
+     STRING....18                              C415       3       3       1   .rodata1    
+     STRING....19                              C418       3       3       1   .rodata1    
+     STRING......................20            C41B      48      72       1   .rodata1    
+     STRING.........Test.End.....21            C463      40      64       1   .rodata1    
+     STRING........Test.running..22            C4A3      48      72       1   .rodata1    
+     STRING........Test.program..23            C4EB      15      21       1   .rodata1    
+     STRING...being.executed.....24            C500      17      23       1   .rodata1    
+     STRING......................25            C517      48      72       1   .rodata1    
+     STRING....26                              C55F       3       3       1   .rodata1    
+     STRING................This..27            C562      32      50       1   .rodata1    
+     STRING................This..28            C594      32      50       1   .rodata1    
+     STRING....1                               C5C6       3       3       1   .rodata1    
+     _LCMP                                     C5C9      19      25       1   NON_BANKED  
+     _LCMP_P                                   C5E2      15      21      15   NON_BANKED  
+     _LINC                                     C5F7       5       5       5   NON_BANKED  
+     _LDEC                                     C5FC       8       8       3   NON_BANKED  
+     _FPCMP                                    C604       8       8       1   NON_BANKED  
+     SuspendOSInterrupts                       C60C       C      12       2   NON_BANKED  
+     ResumeOSInterrupts                        C618       B      11       2   NON_BANKED  
+     OS_RTI_ISR                                C623      36      54       1   NON_BANKED  
+     UnimplementedISR                          C659       2       2      58   NON_BANKED  
+     OSTaskHighRun                             C65B       9       9       6   NON_BANKED  
+     OSTaskSwitch                              C664      11      17       1   NON_BANKED  
+     OSIntCtxSw                                C675       9       9       4   NON_BANKED  
      _BDMSTS                                   FF01       1       1       0   .abs_section_ff01
      _BDMCCR                                   FF06       1       1       0   .abs_section_ff06
      _BDMINR                                   FF07       1       1       0   .abs_section_ff07
@@ -2782,118 +2718,105 @@ STRING.C.o (ansib.lib):
   _memset_clear_8bitCount strlen strset strcat strncat strcpy strncpy strcmp 
   strncmp strchr strrchr strspn strcspn strpbrk strstr strtok strcoll strxfrm 
 rtshc12.c.o (ansib.lib):
-  _BSHL _BSHRS _BSHRU _BDIVMODU _BDIVMODS _ISHL _ISHRU _ISHRS _LSHL _LSHRS 
-  _LADD _LSUB _LAND _LOR _LXOR _LCMP_PP _LNEG _LABS _LMUL _lDivMod _LDIVU 
-  _NEG_P _LDIVS _LMODU _LMODS _ILSEXT _LTEST _COPY _CASE_DIRECT 
+  _BSHL _BSHRS _BSHRU _BDIVMODU _BDIVMODS _ISHL _ISHRU _ISHRS _LSHL _LSHRU 
+  _LSHRS _LADD _LSUB _LAND _LOR _LXOR _LCMP_PP _LNEG _LABS _LCOM _LMUL _lDivMod 
+  _LDIVU _NEG_P _LDIVS _LMODU _LMODS _ILSEXT _LTEST _COPY _CASE_DIRECT 
   _CASE_DIRECT_BYTE _CASE_CHECKED _CASE_CHECKED_BYTE _CASE_SEARCH 
   _CASE_SEARCH_BYTE _CASE_SEARCH_8 _CASE_SEARCH_8_BYTE _FCALL 
+osek.c.o:
+  GetActiveApplicationMode ActivateTask ChainTask GetTaskID GetTaskState 
+  Schedule GetSchedulerResource ReleaseSchedulerResource SetEvent ClearEvent 
+  GetEvent WaitEvent SetAbsAlarm RegisterISR SuspendAllInterrupts 
+  ResumeAllInterrupts EnableAllInterrupts DisableAllInterrupts OS_ECT_C0_ISR 
+  OS_ECT_C1_ISR OS_ECT_C2_ISR OS_ECT_C3_ISR OS_ECT_C4_ISR OS_ECT_C5_ISR 
+  OS_ECT_C6_ISR OS_ECT_OF_ISR OS_ECT_C7_ISR OS_PAOV_ISR OS_PAI_ISR OS_MDCUF_ISR 
+  OS_PABOV_ISR OS_PWMES_ISR OS_IRQ_ISR OS_AD0_ISR OS_AD1_ISR OS_PTJ_ISR 
+  OS_PTH_ISR OS_PTP_ISR OS_CRGPL_ISR OS_CRGSCM_ISR OS_EEPROM_ISR OS_FLASH_ISR 
+  OS_IICB_ISR OS_SPI0_ISR OS_SPI1_ISR OS_SCI0_ISR OS_SCI1_ISR OS_CAN0_WK_ISR 
+  OS_CAN0_ER_ISR OS_CAN0_Rx_ISR OS_CAN0_Tx_ISR OS_CAN1_WK_ISR OS_CAN1_ER_ISR 
+  OS_CAN1_Rx_ISR OS_CAN1_Tx_ISR OS_CAN2_WK_ISR OS_CAN2_ER_ISR OS_CAN2_Rx_ISR 
+  OS_CAN2_Tx_ISR OS_CAN3_WK_ISR OS_CAN3_ER_ISR OS_CAN3_Rx_ISR OS_CAN3_Tx_ISR 
+  OS_CAN4_WK_ISR OS_CAN4_ER_ISR OS_CAN4_Rx_ISR OS_CAN4_Tx_ISR 
+os_cpu_c.c.o:
+  OSTickISR 
+test_api.c.o:
+  IsrFirstAction IsrLastAction ShutdownFirstAction ShutdownLastAction 
+  HardwareInit 
 SCI.c.o:
   OSEKGetChar 
 CRG.c.o:
   PLLInit 
-test_api.c.o:
-  IsrFirstAction IsrLastAction ShutdownFirstAction ShutdownLastAction 
-  HardwareInit 
-os_cpu_c.c.o:
-  OSTickISR 
-osek.c.o:
-  GetActiveApplicationMode ActivateTask ChainTask GetTaskID GetOutResource 
-  ReleaseOutResource GetSchedulerResource ReleaseSchedulerResource SetEvent 
-  GetEvent SuspendAllInterrupts ResumeAllInterrupts EnableAllInterrupts 
-  DisableAllInterrupts OS_ECT_C0_ISR OS_ECT_C1_ISR OS_ECT_C2_ISR OS_ECT_C3_ISR 
-  OS_ECT_C4_ISR OS_ECT_C5_ISR OS_ECT_C6_ISR OS_ECT_OF_ISR OS_ECT_C7_ISR 
-  OS_PAOV_ISR OS_PAI_ISR OS_MDCUF_ISR OS_PABOV_ISR OS_PWMES_ISR OS_IRQ_ISR 
-  OS_AD0_ISR OS_AD1_ISR OS_PTJ_ISR OS_PTH_ISR OS_PTP_ISR OS_CRGPL_ISR 
-  OS_CRGSCM_ISR OS_EEPROM_ISR OS_FLASH_ISR OS_IICB_ISR OS_SPI0_ISR OS_SPI1_ISR 
-  OS_SCI0_ISR OS_SCI1_ISR OS_CAN0_WK_ISR OS_CAN0_ER_ISR OS_CAN0_Rx_ISR 
-  OS_CAN0_Tx_ISR OS_CAN1_WK_ISR OS_CAN1_ER_ISR OS_CAN1_Rx_ISR OS_CAN1_Tx_ISR 
-  OS_CAN2_WK_ISR OS_CAN2_ER_ISR OS_CAN2_Rx_ISR OS_CAN2_Tx_ISR OS_CAN3_WK_ISR 
-  OS_CAN3_ER_ISR OS_CAN3_Rx_ISR OS_CAN3_Tx_ISR OS_CAN4_WK_ISR OS_CAN4_ER_ISR 
-  OS_CAN4_Rx_ISR OS_CAN4_Tx_ISR 
 NOT USED VARIABLES
 STRING.C.o (ansib.lib):
   STRING..1 next.2 
 rtshc12.c.o (ansib.lib):
   _PowOfTwo_8 _PowOfTwo_16 _PowOfTwo_32 
-global.c.o:
-  os_num_task os_task_idle_stk_size OSSTKSystem SystemSTK 
-main.c.o:
-  Task1 Task2 TaskError 
-test.c.o:
-  Test_Number 
 osek.c.o:
-  os_num_task AlarmIndex CounterIndex SuspendCount _CAN0RIER _CAN0TIER 
+  extraStackSize OSSTKSystem SuspendCount OSISRCategory2Mask SystemSTK 
+  _CAN0RIER _CAN0TIER 
+main.c.o:
+  Task1 Task2 Task3 TaskError 
+test.c.o:
+  Test_Number task2_flag 
 
 *********************************************************************************************
 COPYDOWN SECTION
 ---------------------------------------------------------------------------------------------
-------- ROM-ADDRESS: 0xC826 ---- SIZE       4 ---
+------- ROM-ADDRESS: 0xC67E ---- SIZE       4 ---
 Filling bytes inserted
- 00291000
-------- ROM-ADDRESS: 0xC82A ---- RAM-ADDRESS: 0x1000 ---- SIZE       2 ---
+ 001E1000
+------- ROM-ADDRESS: 0xC682 ---- RAM-ADDRESS: 0x1000 ---- SIZE       2 ---
 Name of initialized Object : RES_SCHEDULER
- 10D5
-------- ROM-ADDRESS: 0xC82C ---- SIZE       3 ---
+ 1027
+------- ROM-ADDRESS: 0xC684 ---- SIZE       3 ---
 Filling bytes inserted
  000000
-------- ROM-ADDRESS: 0xC82F ---- RAM-ADDRESS: 0x1005 ---- SIZE       5 ---
-Name of initialized Object : OSISRCfgTbl:3
- FF00000002
-------- ROM-ADDRESS: 0xC834 ---- RAM-ADDRESS: 0x100A ---- SIZE       2 ---
-Name of initialized Object : Task3
- 109E
-------- ROM-ADDRESS: 0xC836 ---- SIZE       3 ---
-Filling bytes inserted
- 000000
-------- ROM-ADDRESS: 0xC839 ---- RAM-ADDRESS: 0x100F ---- SIZE       1 ---
+------- ROM-ADDRESS: 0xC687 ---- RAM-ADDRESS: 0x1005 ---- SIZE       1 ---
 Name of initialized Object : Event1:3
  01
-------- ROM-ADDRESS: 0xC83A ---- SIZE       3 ---
+------- ROM-ADDRESS: 0xC688 ---- SIZE       3 ---
 Filling bytes inserted
  000000
-------- ROM-ADDRESS: 0xC83D ---- RAM-ADDRESS: 0x1013 ---- SIZE       1 ---
+------- ROM-ADDRESS: 0xC68B ---- RAM-ADDRESS: 0x1009 ---- SIZE       1 ---
 Name of initialized Object : Event2:3
  02
-------- ROM-ADDRESS: 0xC83E ---- RAM-ADDRESS: 0x1014 ---- SIZE       2 ---
+------- ROM-ADDRESS: 0xC68C ---- RAM-ADDRESS: 0x100A ---- SIZE       2 ---
 Name of initialized Object : AlarmError
- 10DD
-------- ROM-ADDRESS: 0xC840 ---- RAM-ADDRESS: 0x1016 ---- SIZE       2 ---
+ 1320
+------- ROM-ADDRESS: 0xC68E ---- RAM-ADDRESS: 0x100C ---- SIZE       2 ---
 Name of initialized Object : Alarm1
- 10F3
-------- ROM-ADDRESS: 0xC842 ---- RAM-ADDRESS: 0x1018 ---- SIZE       2 ---
+ 1333
+------- ROM-ADDRESS: 0xC690 ---- RAM-ADDRESS: 0x100E ---- SIZE       2 ---
 Name of initialized Object : Alarm2
- 1109
-------- ROM-ADDRESS: 0xC844 ---- RAM-ADDRESS: 0x101A ---- SIZE       2 ---
+ 1346
+------- ROM-ADDRESS: 0xC692 ---- RAM-ADDRESS: 0x1010 ---- SIZE       2 ---
 Name of initialized Object : Alarm3
- 111F
-------- ROM-ADDRESS: 0xC846 ---- RAM-ADDRESS: 0x101C ---- SIZE       2 ---
+ 1359
+------- ROM-ADDRESS: 0xC694 ---- RAM-ADDRESS: 0x1012 ---- SIZE       2 ---
 Name of initialized Object : Alarm4
- 1135
-------- ROM-ADDRESS: 0xC848 ---- RAM-ADDRESS: 0x101E ---- SIZE       2 ---
+ 136C
+------- ROM-ADDRESS: 0xC696 ---- RAM-ADDRESS: 0x1014 ---- SIZE       2 ---
 Name of initialized Object : Alarm5
- 114B
-------- ROM-ADDRESS: 0xC84A ---- RAM-ADDRESS: 0x1020 ---- SIZE       2 ---
+ 137F
+------- ROM-ADDRESS: 0xC698 ---- RAM-ADDRESS: 0x1016 ---- SIZE       2 ---
 Name of initialized Object : Alarm6
- 1161
-------- ROM-ADDRESS: 0xC84C ---- RAM-ADDRESS: 0x1022 ---- SIZE       2 ---
+ 1392
+------- ROM-ADDRESS: 0xC69A ---- RAM-ADDRESS: 0x1018 ---- SIZE       2 ---
 Name of initialized Object : Alarm7
- 1177
-------- ROM-ADDRESS: 0xC84E ---- RAM-ADDRESS: 0x1024 ---- SIZE       1 ---
+ 13A5
+------- ROM-ADDRESS: 0xC69C ---- RAM-ADDRESS: 0x101A ---- SIZE       1 ---
 Name of initialized Object : task1_run.1
  01
-------- ROM-ADDRESS: 0xC84F ---- RAM-ADDRESS: 0x1025 ---- SIZE       1 ---
-Name of initialized Object : task_state.2
- 04
-------- ROM-ADDRESS: 0xC850 ---- RAM-ADDRESS: 0x1026 ---- SIZE       1 ---
-Name of initialized Object : task2_run.4
+------- ROM-ADDRESS: 0xC69D ---- RAM-ADDRESS: 0x101B ---- SIZE       1 ---
+Name of initialized Object : task2_run.2
  01
-------- ROM-ADDRESS: 0xC851 ---- RAM-ADDRESS: 0x1027 ---- SIZE       1 ---
-Name of initialized Object : task_state.5
- 04
-------- ROM-ADDRESS: 0xC852 ---- RAM-ADDRESS: 0x1028 ---- SIZE       1 ---
-Name of initialized Object : task3_run.7
+------- ROM-ADDRESS: 0xC69E ---- RAM-ADDRESS: 0x101C ---- SIZE       1 ---
+Name of initialized Object : task3_run.3
  01
-------- ROM-ADDRESS: 0xC853 ---- SIZE       2 ---
+------- ROM-ADDRESS: 0xC69F ---- RAM-ADDRESS: 0x101D ---- SIZE       1 ---
+Name of initialized Object : taskError_run.4
+ 01
+------- ROM-ADDRESS: 0xC6A0 ---- SIZE       2 ---
 Filling bytes inserted
  0000
 
@@ -2901,7 +2824,6 @@ Filling bytes inserted
 OBJECT-DEPENDENCIES SECTION
 ---------------------------------------------------------------------------------------------
 RES_SCHEDULER             USES OSResources 
-Task3                     USES OSTCBTbl 
 AlarmError                USES OSAlarms 
 Alarm1                    USES OSAlarms 
 Alarm2                    USES OSAlarms 
@@ -2911,29 +2833,49 @@ Alarm5                    USES OSAlarms
 Alarm6                    USES OSAlarms 
 Alarm7                    USES OSAlarms 
 BoardInit                 USES SCI0Init OSTickStart 
+StartOS                   USES OSTaskInit ResourceInit OSAlarmInit StartupHook 
+                                ActiveAppMode OSRdyGrp OSUnMapTbl OSRdyTbl OSTCBPrioTbl 
+                                OSTCBCur OSTaskHighRun 
+OSIntExit                 USES OSIntNesting OSTCBCur OSRdyGrp OSUnMapTbl 
+                                OSRdyTbl OSTCBPrioTbl OSTCBOld OSTaskHighRun OSIntCtxSw 
+ShutdownOS                USES SuspendOSInterrupts ShutdownHook _CRGFLG 
+                                ResumeOSInterrupts 
+OSTaskInit                USES OSTaskCfgTbl OSRdyTbl OSTCBTbl OSTaskIdle 
+                                OSRdyGrp OSTaskInit OSTaskIdleStk ExtraStack FreeStkTop 
+                                FreeStkBottom OSTCBPrioTbl OSMapTbl OSTaskStkInit 
+TerminateTask             USES OSTCBCur OSIntNesting OsLastError OSTCBOld 
+                                OSRdyTbl OSRdyGrp OSUnMapTbl OSTCBPrioTbl OSTaskHighRun 
+                                OSIntCtxSw 
+OSActivateTask            USES OSTCBCur OSRdyGrp OSRdyTbl OSTaskStkInit 
+                                OSIntNesting OSTCBOld 
+ResourceInit              USES RES_SCHEDULER 
+OSSetEvent                USES OSTCBCur _LCMP OSRdyGrp OSRdyTbl OSIntNesting 
+                                OSTCBOld 
+OSAlarmInit               USES OSAlarms OSAlarmCfgTbl OSCounterCfgTbl 
+                                OSCounters OSTCBTbl OSInsertAlarm 
+OSInsertAlarm             USES OSInsertAlarm _LCMP_P _LINC 
+OSDeleteAlarm             USES _LCMP_P _LINC 
+OSCounterTrigger          USES _LINC _LDEC OSCheckAlarms 
+OSCheckAlarms             USES OSNotifyAlarm OSCheckAlarms _LCMP_P _LINC 
+OSNotifyAlarm             USES OSSetEvent OSActivateTask _LCMP_P _LDEC 
+GetAlarmBase              USES OSAlarms OsLastError memcpy 
+GetAlarm                  USES OSAlarms OsLastError _LCMP_P _LINC 
+SetRelAlarm               USES OSAlarms _LCMP_P OsLastError SetRelAlarm 
+                                OSNotifyAlarm _LDEC OSInsertAlarm 
+CancelAlarm               USES OSAlarms OsLastError OSDeleteAlarm 
 main                      USES BoardInit StartOS 
 Init                      USES _startupData 
 CompareAndtestWrite       USES testWrite 
-FuncTask1                 USES task_state.2 p_task_state.3 task1_run.1 
-                                testWrite Alarm5 SetRelAlarm CompareAndtestWrite Task3 
-                                GetTaskState Schedule TerminateTask 
-FuncTask2                 USES task_state.5 p_task_state.6 task2_run.4 
-                                FuncTask2 CancelAlarm Alarm2 Alarm3 SetRelAlarm Alarm4 
-                                Task3 GetTaskState CompareAndtestWrite task2_flag 
-                                Schedule Alarm1 TerminateTask GetAlarm testWrite 
-FuncTask3                 USES task3_run.7 FuncTask3 AlarmError SetRelAlarm 
-                                Alarm6 _LINC CompareAndtestWrite Alarm7 SetAbsAlarm 
-                                Alarm3 Alarm2 Alarm1 Alarm4 CancelAlarm Alarm5 Event2 
-                                ClearEvent task2_flag ShutdownOS TerminateTask GetAlarm 
-                                Event1 WaitEvent GetAlarmBase _LDEC testWrite 
-FuncTaskError             USES testWrite ShutdownOS 
+FuncTask1                 USES task1_run.1 testWrite ShutdownOS TerminateTask 
+FuncTask2                 USES task2_run.2 testWrite TerminateTask 
+FuncTask3                 USES task3_run.3 FuncTask3 AlarmError SetRelAlarm 
+                                testWrite Alarm7 Alarm6 CompareAndtestWrite Alarm5 
+                                Alarm4 Alarm3 Alarm2 Alarm1 TerminateTask GetAlarm 
+                                GetAlarmBase CancelAlarm 
+FuncTaskError             USES taskError_run.4 testWrite ShutdownOS 
+                                TerminateTask 
 ShutdownHook              USES testCompare 
 StartupHook               USES testInit 
-SCI0Init                  USES _SCI0BD _SCI0CR2 
-OSEKPrintChar             USES _SCI0SR1 _SCI0DRL 
-OSEKPrintString           USES _SCI0SR1 _SCI0DRL 
-OSEKPrintInt              USES OSEKPrintChar STRING....1 OSEKPrintString 
-OSTickStart               USES _RTICTL _CRGINT 
 testInit                  USES STRING......................1 
                                 STRING.........Test.Start...2 STRING........Test.running..3 
                                 STRING........Testprogram...4 TestName STRING..Test.sub.Number...d.5 
@@ -2949,82 +2891,22 @@ testCompare               USES STRING.Buffer.Position.....8 testCompare
                                 STRING........Test.running..22 STRING........Test.program..23 TestName 
                                 STRING...being.executed.....24 STRING......................25 STRING....26 
                                 STRING................This..27 STRING................This..28 OSEKPrintString 
-StartOS                   USES os_num_sys_task os_max_task OSTaskInit 
-                                ResourceInit OSAlarmInit OSISRInit StartupHook 
-                                ActiveAppMode OSRdyGrp OSUnMapTbl OSRdyTbl OSTCBPrioTbl 
-                                OSTCBCur OSTCBTbl OSTaskHighRun 
-ShutdownOS                USES SuspendOSInterrupts ShutdownHook _CRGFLG 
-                                ResumeOSInterrupts 
-OSTaskInit                USES OSTaskCfgTbl OSRdyTbl os_rdy_tbl_size OSTCBTbl 
-                                OSTaskIdle OSTaskIdleStk OSRdyGrp OSTaskStkInit 
-                                extraStackSize ExtraStack FreeStkTop FreeStkBottom 
-                                OSTCBPrioTbl OSTaskInit OSMapTbl os_num_sys_task 
-TerminateTask             USES OSTCBCur OsLastError OSNestedErrorHook 
-                                OSNestedHook SuspendOSInterrupts ErrorHook 
-                                ResumeOSInterrupts OSIntNesting TerminateTask OSTCBTbl OSRdyTbl 
-                                OSRdyGrp OSTCBPrioTbl OSTCBOld OSUnMapTbl OSTaskHighRun 
-                                OSIntCtxSw 
-GetTaskState              USES os_num_sys_task OSTCBTbl OsLastError 
-                                OSNestedErrorHook OSNestedHook SuspendOSInterrupts ErrorHook 
-                                ResumeOSInterrupts OSTCBCur 
-Schedule                  USES OSIntNesting OsLastError OSNestedErrorHook 
-                                OSNestedHook SuspendOSInterrupts ErrorHook 
-                                ResumeOSInterrupts OSTCBCur Schedule OSTCBTbl OSRdyTbl OSRdyGrp 
-                                OSTCBPrioTbl OSTCBOld OSUnMapTbl 
-OSActivateTask            USES OSTCBCur OSActivateTask OSTaskStkInit 
-                                OSIntNesting OSTCBOld OSTCBTbl OSTCBPrioTbl OSRdyTbl 
-                                OSRdyGrp 
-ResourceInit              USES OSResPrioTbl OSResources os_num_out_res 
-                                os_num_sys_task RES_SCHEDULER 
-ClearEvent                USES OSTCBCur OsLastError OSNestedErrorHook 
-                                OSNestedHook SuspendOSInterrupts ErrorHook 
-                                ResumeOSInterrupts OSIntNesting _LCOM 
-WaitEvent                 USES OSTCBCur OsLastError OSNestedErrorHook 
-                                OSNestedHook SuspendOSInterrupts WaitEvent 
-                                ResumeOSInterrupts OSIntNesting _LCMP OSTCBTbl OSRdyTbl OSRdyGrp 
-                                OSTCBPrioTbl OSTCBOld OSUnMapTbl ErrorHook 
-OSSetEvent                USES OSTCBCur _LCMP OSRdyGrp OSRdyTbl OSIntNesting 
-                                OSTCBOld OSTCBTbl OSTCBPrioTbl 
-OSAlarmInit               USES OSAlarms OSAlarmCfgTbl OSCounters 
-                                OSCounterCfgTbl os_num_ctr OSTCBTbl OSInsertAlarm os_num_alarm 
-OSInsertAlarm             USES OSInsertAlarm _LCMP_P _LINC 
-OSDeleteAlarm             USES _LCMP_P _LINC 
-OSCounterTrigger          USES _LINC _LDEC OSCheckAlarms 
-OSCheckAlarms             USES OSNotifyAlarm OSCheckAlarms _LCMP_P _LINC 
-OSNotifyAlarm             USES OSSetEvent OSActivateTask _LCMP_P _LDEC 
-GetAlarmBase              USES os_num_alarm OSAlarms OsLastError 
-                                OSNestedErrorHook OSNestedHook SuspendOSInterrupts ErrorHook 
-                                ResumeOSInterrupts memcpy 
-GetAlarm                  USES os_num_alarm OSAlarms OsLastError 
-                                OSNestedErrorHook OSNestedHook SuspendOSInterrupts ErrorHook 
-                                ResumeOSInterrupts _LCMP_P _LINC 
-SetRelAlarm               USES os_num_alarm OSAlarms SetRelAlarm 
-                                SuspendOSInterrupts ResumeOSInterrupts OSNestedErrorHook _LCMP_P 
-                                OSNotifyAlarm _LDEC OSInsertAlarm ErrorHook OSNestedHook 
-                                OsLastError 
-SetAbsAlarm               USES os_num_alarm OSAlarms SetAbsAlarm 
-                                SuspendOSInterrupts ResumeOSInterrupts OSNestedErrorHook _LCMP_P 
-                                OSNotifyAlarm _LINC OSInsertAlarm ErrorHook OSNestedHook 
-                                OsLastError 
-CancelAlarm               USES os_num_alarm OSAlarms OsLastError 
-                                OSNestedErrorHook OSNestedHook SuspendOSInterrupts ErrorHook 
-                                ResumeOSInterrupts OSDeleteAlarm 
+SCI0Init                  USES _SCI0BD _SCI0CR2 
+OSEKPrintChar             USES _SCI0SR1 _SCI0DRL 
+OSEKPrintString           USES _SCI0SR1 _SCI0DRL 
+OSEKPrintInt              USES OSEKPrintChar STRING....1 OSEKPrintString 
+OSTickStart               USES _RTICTL _CRGINT 
 _Startup                  USES _startupData Init 
 OSTaskCfgTbl              USES FuncTask1 Task1Stack FuncTask2 Task2Stack 
                                 FuncTask3 Task3Stack FuncTaskError TaskErrorStack 
 OSAlarmCfgTbl             USES Event1 Event2 
-OSTaskHighRun             USES OSTCBCur _PPAGE 
-OSTaskSwitch              USES _PPAGE OSTCBOld OSTCBCur 
-OSIntCtxSw                USES OSTCBCur _PPAGE 
-OSISRInit                 USES OSISRCfgTbl ISRVector _LINC _INTCR _LSHRU 
-                                OSISRCategory2Mask os_num_isr 
-OSIntExit                 USES OSIntNesting OSTCBCur OSIntExit OSRdyGrp 
-                                OSUnMapTbl OSRdyTbl OSTCBPrioTbl OSTCBOld OSTCBTbl 
-                                OSTaskHighRun OSIntCtxSw 
 SuspendOSInterrupts       USES OSSuspendCount 
 ResumeOSInterrupts        USES OSSuspendCount 
 OS_RTI_ISR                USES _PPAGE OSIntNesting OSTCBCur _CRGFLG ISRVector 
                                 _FPCMP OSCounters OSCounterTrigger OSIntExit 
+OSTaskHighRun             USES OSTCBCur _PPAGE 
+OSTaskSwitch              USES _PPAGE OSTCBOld OSTCBCur 
+OSIntCtxSw                USES OSTCBCur _PPAGE 
 _vect                     USES UnimplementedISR OS_RTI_ISR OSTaskSwitch 
                                 _Startup 
 
@@ -3051,12 +2933,40 @@ DEPENDENCY TREE
  |     |  |  |  | 
  |     |  |  |  +- testWrite           
  |     |  |  |  |    
- |     |  |  |  +- SetRelAlarm         
+ |     |  |  |  +- ShutdownOS          
  |     |  |  |  |  | 
  |     |  |  |  |  +- SuspendOSInterrupts 
  |     |  |  |  |  |    
+ |     |  |  |  |  +- ShutdownHook        
+ |     |  |  |  |  |  | 
+ |     |  |  |  |  |  +- testCompare         
+ |     |  |  |  |  |     | 
+ |     |  |  |  |  |     +- OSEKPrintInt        
+ |     |  |  |  |  |     |  | 
+ |     |  |  |  |  |     |  +- OSEKPrintChar       
+ |     |  |  |  |  |     |  |    
+ |     |  |  |  |  |     |  +- OSEKPrintString     
+ |     |  |  |  |  |     |       
+ |     |  |  |  |  |     +- OSEKPrintString      (see above)
+ |     |  |  |  |  |        
  |     |  |  |  |  +- ResumeOSInterrupts  
- |     |  |  |  |  |    
+ |     |  |  |  |       
+ |     |  |  |  +- TerminateTask       
+ |     |  |  |     | 
+ |     |  |  |     +- OSTaskHighRun       
+ |     |  |  |     |    
+ |     |  |  |     +- OSIntCtxSw          
+ |     |  |  |          
+ |     |  |  +- FuncTask2           
+ |     |  |  |  | 
+ |     |  |  |  +- testWrite            (see above)
+ |     |  |  |  |  
+ |     |  |  |  +- TerminateTask        (see above)
+ |     |  |  |     
+ |     |  |  +- FuncTask3           
+ |     |  |  |  | 
+ |     |  |  |  +- SetRelAlarm         
+ |     |  |  |  |  | 
  |     |  |  |  |  +- _LCMP_P             
  |     |  |  |  |  |    
  |     |  |  |  |  +- OSNotifyAlarm       
@@ -3076,172 +2986,44 @@ DEPENDENCY TREE
  |     |  |  |  |  +- _LDEC                (see above)
  |     |  |  |  |  |  
  |     |  |  |  |  +- OSInsertAlarm       
- |     |  |  |  |  |  | 
- |     |  |  |  |  |  +- _LCMP_P              (see above)
- |     |  |  |  |  |  |  
- |     |  |  |  |  |  +- _LINC               
- |     |  |  |  |  |       
- |     |  |  |  |  +- ErrorHook           
- |     |  |  |  |       
+ |     |  |  |  |     | 
+ |     |  |  |  |     +- _LCMP_P              (see above)
+ |     |  |  |  |     |  
+ |     |  |  |  |     +- _LINC               
+ |     |  |  |  |          
+ |     |  |  |  +- testWrite            (see above)
+ |     |  |  |  |  
  |     |  |  |  +- CompareAndtestWrite 
  |     |  |  |  |  | 
  |     |  |  |  |  +- testWrite            (see above)
  |     |  |  |  |     
- |     |  |  |  +- GetTaskState        
- |     |  |  |  |  | 
- |     |  |  |  |  +- SuspendOSInterrupts  (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ErrorHook            (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ResumeOSInterrupts   (see above)
- |     |  |  |  |     
- |     |  |  |  +- Schedule            
- |     |  |  |  |  | 
- |     |  |  |  |  +- SuspendOSInterrupts  (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ErrorHook            (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ResumeOSInterrupts   (see above)
- |     |  |  |  |     
- |     |  |  |  +- TerminateTask       
- |     |  |  |     | 
- |     |  |  |     +- SuspendOSInterrupts  (see above)
- |     |  |  |     |  
- |     |  |  |     +- ErrorHook            (see above)
- |     |  |  |     |  
- |     |  |  |     +- ResumeOSInterrupts   (see above)
- |     |  |  |     |  
- |     |  |  |     +- OSTaskHighRun       
- |     |  |  |     |    
- |     |  |  |     +- OSIntCtxSw          
- |     |  |  |          
- |     |  |  +- FuncTask2           
- |     |  |  |  | 
- |     |  |  |  +- CancelAlarm         
- |     |  |  |  |  | 
- |     |  |  |  |  +- SuspendOSInterrupts  (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ErrorHook            (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ResumeOSInterrupts   (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- OSDeleteAlarm       
- |     |  |  |  |     | 
- |     |  |  |  |     +- _LCMP_P              (see above)
- |     |  |  |  |     |  
- |     |  |  |  |     +- _LINC                (see above)
- |     |  |  |  |        
- |     |  |  |  +- SetRelAlarm          (see above)
- |     |  |  |  |  
- |     |  |  |  +- GetTaskState         (see above)
- |     |  |  |  |  
- |     |  |  |  +- CompareAndtestWrite  (see above)
- |     |  |  |  |  
- |     |  |  |  +- Schedule             (see above)
- |     |  |  |  |  
  |     |  |  |  +- TerminateTask        (see above)
  |     |  |  |  |  
  |     |  |  |  +- GetAlarm            
  |     |  |  |  |  | 
- |     |  |  |  |  +- SuspendOSInterrupts  (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ErrorHook            (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ResumeOSInterrupts   (see above)
- |     |  |  |  |  |  
  |     |  |  |  |  +- _LCMP_P              (see above)
  |     |  |  |  |  |  
  |     |  |  |  |  +- _LINC                (see above)
- |     |  |  |  |     
- |     |  |  |  +- testWrite            (see above)
- |     |  |  |     
- |     |  |  +- FuncTask3           
- |     |  |  |  | 
- |     |  |  |  +- SetRelAlarm          (see above)
- |     |  |  |  |  
- |     |  |  |  +- _LINC                (see above)
- |     |  |  |  |  
- |     |  |  |  +- CompareAndtestWrite  (see above)
- |     |  |  |  |  
- |     |  |  |  +- SetAbsAlarm         
- |     |  |  |  |  | 
- |     |  |  |  |  +- SuspendOSInterrupts  (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ResumeOSInterrupts   (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- _LCMP_P              (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- OSNotifyAlarm        (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- _LINC                (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- OSInsertAlarm        (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ErrorHook            (see above)
- |     |  |  |  |     
- |     |  |  |  +- CancelAlarm          (see above)
- |     |  |  |  |  
- |     |  |  |  +- ClearEvent          
- |     |  |  |  |  | 
- |     |  |  |  |  +- SuspendOSInterrupts  (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ErrorHook            (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ResumeOSInterrupts   (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- _LCOM               
- |     |  |  |  |       
- |     |  |  |  +- ShutdownOS          
- |     |  |  |  |  | 
- |     |  |  |  |  +- SuspendOSInterrupts  (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ShutdownHook        
- |     |  |  |  |  |  | 
- |     |  |  |  |  |  +- testCompare         
- |     |  |  |  |  |     | 
- |     |  |  |  |  |     +- OSEKPrintInt        
- |     |  |  |  |  |     |  | 
- |     |  |  |  |  |     |  +- OSEKPrintChar       
- |     |  |  |  |  |     |  |    
- |     |  |  |  |  |     |  +- OSEKPrintString     
- |     |  |  |  |  |     |       
- |     |  |  |  |  |     +- OSEKPrintString      (see above)
- |     |  |  |  |  |        
- |     |  |  |  |  +- ResumeOSInterrupts   (see above)
- |     |  |  |  |     
- |     |  |  |  +- TerminateTask        (see above)
- |     |  |  |  |  
- |     |  |  |  +- GetAlarm             (see above)
- |     |  |  |  |  
- |     |  |  |  +- WaitEvent           
- |     |  |  |  |  | 
- |     |  |  |  |  +- SuspendOSInterrupts  (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ResumeOSInterrupts   (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- _LCMP                (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ErrorHook            (see above)
  |     |  |  |  |     
  |     |  |  |  +- GetAlarmBase        
  |     |  |  |  |  | 
- |     |  |  |  |  +- SuspendOSInterrupts  (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ErrorHook            (see above)
- |     |  |  |  |  |  
- |     |  |  |  |  +- ResumeOSInterrupts   (see above)
- |     |  |  |  |  |  
  |     |  |  |  |  +- memcpy              
  |     |  |  |  |       
- |     |  |  |  +- _LDEC                (see above)
- |     |  |  |  |  
- |     |  |  |  +- testWrite            (see above)
- |     |  |  |     
+ |     |  |  |  +- CancelAlarm         
+ |     |  |  |     | 
+ |     |  |  |     +- OSDeleteAlarm       
+ |     |  |  |        | 
+ |     |  |  |        +- _LCMP_P              (see above)
+ |     |  |  |        |  
+ |     |  |  |        +- _LINC                (see above)
+ |     |  |  |           
  |     |  |  +- FuncTaskError       
  |     |  |     | 
  |     |  |     +- testWrite            (see above)
  |     |  |     |  
  |     |  |     +- ShutdownOS           (see above)
+ |     |  |     |  
+ |     |  |     +- TerminateTask        (see above)
  |     |  |        
  |     |  +- OSTaskIdle          
  |     |  |    
@@ -3253,12 +3035,6 @@ DEPENDENCY TREE
  |     |  | 
  |     |  +- OSInsertAlarm        (see above)
  |     |     
- |     +- OSISRInit           
- |     |  | 
- |     |  +- _LINC                (see above)
- |     |  |  
- |     |  +- _LSHRU              
- |     |       
  |     +- StartupHook         
  |     |  | 
  |     |  +- testInit            
@@ -3310,5 +3086,5 @@ STATISTIC SECTION
 ExeFile:
 --------
 Number of blocks to be downloaded: 7
-Total size of all blocks to be downloaded: 9643
+Total size of all blocks to be downloaded: 5556
 

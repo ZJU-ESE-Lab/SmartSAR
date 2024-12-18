@@ -21,7 +21,9 @@
 
 #define DeclareEvent(Event) extern EventMaskType Event
 
+#ifdef OS_ALARM_EN
 void OSSetEvent ( TaskType TaskID,EventMaskRefType Mask );
+#endif/*#ifdef OS_ALARM_EN*/
 
 /*     
 *标准API接口函数
